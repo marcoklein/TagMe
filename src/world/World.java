@@ -44,6 +44,8 @@ public class World {
      */
     private ArrayList<Spatial> worldObjects;
     
+    private ArrayList<WorldListener> listeners;
+    
     /**
      * All Game Objects are added to the world node.
      */
@@ -56,10 +58,11 @@ public class World {
         initialize();
     }
     
-    public void initialize() {
+    private void initialize() {
         worldNode.detachAllChildren();
         players = new ArrayList<>();
         worldObjects = new ArrayList<>();
+        listeners = new ArrayList<>();
     }
     
     public void reset() {
@@ -100,6 +103,10 @@ public class World {
             LOG.log(Level.WARNING, "Could not add Game Object {0} because no appropriate control could be found - entity is no Game Object.", entity);
             return;
         }
+        
+        for (WorldListener listener : listeners) {
+            listener.gameObjectAdded(entity);
+        }
 
         worldNode.attachChild(entity);
     }
@@ -114,6 +121,14 @@ public class World {
         worldObjects.remove(entity);
         entity.removeFromParent();
         bulletAppState.getPhysicsSpace().remove(entity);
+        
+        for (WorldListener listener : listeners) {
+            listener.gameObjectRemoved(entity);
+        }
+    }
+    
+    public void addListener(WorldListener listener) {
+        listeners.add(listener);
     }
 
     public Application getApp() {
