@@ -4,7 +4,7 @@
  */
 package world;
 
-import com.jme3.asset.TextureKey;
+import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.input.ChaseCamera;
@@ -14,7 +14,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.texture.Texture;
 import world.controls.DestroyableControl;
 import world.controls.ObstacleControl;
 import world.controls.PlayerControl;

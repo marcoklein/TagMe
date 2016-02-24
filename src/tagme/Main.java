@@ -35,6 +35,7 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {
         // add a ground (for test only)
         Spatial ground = assetManager.loadModel("Models/newScene.j3o");
+        ground.setLocalTranslation(100, 0, 100);
         ground.addControl(new RigidBodyControl(0));
         rootNode.attachChild(ground);
         flyCam.setMoveSpeed(40);
@@ -75,7 +76,7 @@ public class Main extends SimpleApplication {
         
         GameObjectFactory factory = new GameObjectFactory(world);
         
-        initWorld(world, new Vector3f(100, 10, 100));
+        initWorld(world, new Vector3f(200, 10, 200));
         
         Spatial player = factory.createPlayer(new Vector3f(0, 10, 0), ColorRGBA.Green);
         world.addGameObject(player);
@@ -84,12 +85,12 @@ public class Main extends SimpleApplication {
     private void initWorld(World world, Vector3f worldSize) {
         GameObjectFactory factory = new GameObjectFactory(world);
         
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 100; i++) {
             // create a random obstacle size
             Vector3f obstacleSize = new Vector3f();
-            obstacleSize.x = (float) (random.nextInt(800) + 10) / 100f;
+            obstacleSize.x = (float) (random.nextInt(1000) + 10) / 100f;
             obstacleSize.y = (float) (random.nextInt(400) + 10) / 100f;
-            obstacleSize.z = (float) (random.nextInt(800) + 10) / 100f;
+            obstacleSize.z = (float) (random.nextInt(1000) + 10) / 100f;
             spawnObstacle(world, factory, worldSize, obstacleSize);
         }
     }
@@ -101,7 +102,7 @@ public class Main extends SimpleApplication {
         targetPosition.y = (float) random.nextInt((int) (worldSize.y * 1000)) / 1000f;
         targetPosition.z = (float) random.nextInt((int) (worldSize.z * 1000)) / 1000f;
         Geometry obstacleGeom = ModelFactory.createBox(assetManager, obstacleSize.x, obstacleSize.y, obstacleSize.z, ColorRGBA.Blue);
-        Spatial obstacle = factory.createObstacle(new Vector3f(targetPosition.x, 0, targetPosition.z), targetPosition, obstacleGeom, 2);
+        Spatial obstacle = factory.createObstacle(new Vector3f(targetPosition.x, 0, targetPosition.z), targetPosition, obstacleGeom, 0.2f);
         // set start position of obstacle underneath the ground so it can rise up
         world.addGameObject(obstacle);
         return obstacle;
