@@ -45,7 +45,7 @@ public class GameObjectFactory {
         // move player to start location
         player.setLocalTranslation(startLocation);
         // add physics to player
-        BetterCharacterControl characterControl = new BetterCharacterControl(0.8f, 2f, 1f);
+        BetterCharacterControl characterControl = new BetterCharacterControl(1f, 2f, 1f);
         characterControl.setJumpForce(new Vector3f(0, 10f, 0));
         player.addControl(characterControl);
         player.addControl(new PlayerControl(world, 300));
@@ -64,7 +64,10 @@ public class GameObjectFactory {
 //        player.attachChild(camNode);
 //        camNode.setLocalTranslation(0, 5, -5);
 //        camNode.lookAt(player.getLocalTranslation(), Vector3f.UNIT_Y);
-        new ChaseCamera(world.getApp().getCamera(), geometry, world.getApp().getInputManager());
+        ChaseCamera cam = new ChaseCamera(world.getApp().getCamera(), geometry, world.getApp().getInputManager());
+        cam.setDragToRotate(false);
+        cam.setInvertVerticalAxis(true);
+        
         return player;
     }
     
@@ -85,11 +88,12 @@ public class GameObjectFactory {
         rigidControl.setKinematic(true);
         
         // add an obstacle material
-        Material mat = new Material(world.getApp().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        TextureKey key = new TextureKey("Textures/Terrain/BrickWall/BrickWall.jpg");
-        key.setGenerateMips(true);
-        Texture tex  = world.getApp().getAssetManager().loadTexture(key);
-        mat.setTexture("ColorMap", tex);
+//        Material mat = new Material(world.getApp().getAssetManager(), "Materials/player.j3m");
+//        TextureKey key = new TextureKey("Textures/Terrain/BrickWall/BrickWall.jpg");
+//        key.setGenerateMips(true);
+//        Texture tex  = world.getApp().getAssetManager().loadTexture(key);
+//        mat.setTexture("ColorMap", tex);
+        Material mat = world.getApp().getAssetManager().loadMaterial("Materials/player.j3m");
         
         geometry.setMaterial(mat);
         return obstacle;

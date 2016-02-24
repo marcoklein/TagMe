@@ -1,5 +1,6 @@
 package tagme;
 
+import com.jme3.app.FlyCamAppState;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.RigidBodyControl;
@@ -35,6 +36,11 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(ground);
         flyCam.setMoveSpeed(40);
         flyCam.setEnabled(false);
+        // remove the fly cam completly since it would interfere with the game
+        stateManager.detach(stateManager.getState(FlyCamAppState.class));
+        
+        // hide cursor since player will always look around
+        inputManager.setCursorVisible(false);
         
         // add a light
         AmbientLight light = new AmbientLight();
