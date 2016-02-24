@@ -46,9 +46,9 @@ public class GameObjectFactory {
         player.setLocalTranslation(startLocation);
         // add physics to player
         BetterCharacterControl characterControl = new BetterCharacterControl(1f, 2f, 1f);
-        characterControl.setJumpForce(new Vector3f(0, 10f, 0));
+        characterControl.setJumpForce(new Vector3f(0, 11f, 0));
         player.addControl(characterControl);
-        player.addControl(new PlayerControl(world, 300));
+        player.addControl(new PlayerControl(world, 8));
         
         // set up geometry
         Geometry geometry = ModelFactory.createSphere(world.getApp().getAssetManager(), 1, color);
@@ -78,8 +78,9 @@ public class GameObjectFactory {
      * @param geometry
      * @return 
      */
-    public Spatial createObstacle(Geometry geometry, float initialSpeed, Vector3f startTargetLocation) {
+    public Spatial createObstacle(Vector3f startLocation, Vector3f startTargetLocation, Geometry geometry, float initialSpeed) {
         Node obstacle = new Node();
+        obstacle.setLocalTranslation(startLocation);
         obstacle.attachChild(geometry);
         obstacle.addControl(new ObstacleControl(initialSpeed, startTargetLocation));
         obstacle.addControl(new DestroyableControl());

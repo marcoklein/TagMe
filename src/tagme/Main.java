@@ -12,6 +12,7 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import java.util.Random;
 import world.GameObjectFactory;
 import world.ModelFactory;
 import world.World;
@@ -27,6 +28,8 @@ public class Main extends SimpleApplication {
 
     private BulletAppState bulletAppState;
     private World world;
+    
+    private Random random = new Random();
 
     @Override
     public void simpleInitApp() {
@@ -54,9 +57,9 @@ public class Main extends SimpleApplication {
 
         // set up physics
         bulletAppState = new BulletAppState();
-        stateManager.attach(bulletAppState);
-        //bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
+        bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
         //bulletAppState.setDebugEnabled(true);
+        stateManager.attach(bulletAppState);
         
         // set up world
         Node worldNode = new Node();
@@ -72,22 +75,36 @@ public class Main extends SimpleApplication {
         
         GameObjectFactory factory = new GameObjectFactory(world);
         
-        Geometry obstacleGeom = ModelFactory.createBox(assetManager, 3, 1, 3, ColorRGBA.Blue);
-        Spatial obstacle = factory.createObstacle(obstacleGeom, 2, new Vector3f(0, 5, 0));
-        world.addGameObject(obstacle);
-        
-        
-        obstacleGeom = ModelFactory.createBox(assetManager, 6, 1, 3, ColorRGBA.Blue);
-        obstacle = factory.createObstacle(obstacleGeom, 5, new Vector3f(12, 8, 1));
-        world.addGameObject(obstacle);
-        
-        
-        obstacleGeom = ModelFactory.createBox(assetManager, 3, 4, 3, ColorRGBA.Blue);
-        obstacle = factory.createObstacle(obstacleGeom, 0.4f, new Vector3f(-5, 5, -3));
-        world.addGameObject(obstacle);
+        initWorld(world, new Vector3f(100, 10, 100));
         
         Spatial player = factory.createPlayer(new Vector3f(0, 10, 0), ColorRGBA.Green);
         world.addGameObject(player);
+    }
+    
+    private void initWorld(World world, Vector3f worldSize) {
+        GameObjectFactory factory = new GameObjectFactory(world);
+        
+        for (int i = 0; i < 20; i++) {
+            // create a random obstacle size
+            Vector3f obstacleSize = new Vector3f();
+            obstacleSize.x = (float) (random.nextInt(800) + 10) / 100f;
+            obstacleSize.y = (float) (random.nextInt(400) + 10) / 100f;
+            obstacleSize.z = (float) (random.nextInt(800) + 10) / 100f;
+            spawnObstacle(world, factory, worldSize, obstacleSize);
+        }
+    }
+    
+    private Spatial spawnObstacle(World world, GameObjectFactory factory, Vector3f worldSize, Vector3f obstacleSize) {
+        Vector3f targetPosition = new Vector3f();
+        // get a random position
+        targetPosition.x = (float) random.nextInt((int) (worldSize.x * 1000)) / 1000f;
+        targetPosition.y = (float) random.nextInt((int) (worldSize.y * 1000)) / 1000f;
+        targetPosition.z = (float) random.nextInt((int) (worldSize.z * 1000)) / 1000f;
+        Geometry obstacleGeom = ModelFactory.createBox(assetManager, obstacleSize.x, obstacleSize.y, obstacleSize.z, ColorRGBA.Blue);
+        Spatial obstacle = factory.createObstacle(new Vector3f(targetPosition.x, 0, targetPosition.z), targetPosition, obstacleGeom, 2);
+        // set start position of obstacle underneath the ground so it can rise up
+        world.addGameObject(obstacle);
+        return obstacle;
     }
 
     @Override

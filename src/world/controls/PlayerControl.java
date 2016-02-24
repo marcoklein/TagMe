@@ -114,14 +114,14 @@ public class PlayerControl extends GameObjectControl implements ActionListener {
             
         }
         
-        tempVector.normalizeLocal().multLocal(speed * tpf);
+        tempVector.normalizeLocal().multLocal(speed);
         characterControl.getWalkDirection().set(tempVector);
         
         // animate player movement by rotating the player (since its geometry is a sphere)
         // TODO animate the player somewhere else (maybe an extra PlayerAnimationControl) only for better code design
         // get player geometry (could be implemented nicer - see todo on top)
         Geometry playerGeom = (Geometry) ((Node) spatial).getChild("PlayerGeometry");
-        playerGeom.rotate(tempVector.length() * tpf * tempVector.x, 0, tempVector.length() * tpf * tempVector.z);
+        playerGeom.rotate(tpf * tempVector.x, 0, tpf * tempVector.z);
     }
 
     @Override

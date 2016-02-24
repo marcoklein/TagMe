@@ -80,6 +80,8 @@ public class ObstacleControl extends WorldObjectControl {
                 // reached target location
                 spatial.setLocalTranslation(worldLocation.clone());
                 movingToInitialLocation = false;
+                spatial.getControl(RigidBodyControl.class).setMass(0);
+                spatial.getControl(RigidBodyControl.class).setKinematic(false);
             } else {
                 // move just by moving the spatial
                 // move towards target location
