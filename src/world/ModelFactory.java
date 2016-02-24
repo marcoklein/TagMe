@@ -29,10 +29,6 @@ public class ModelFactory {
     public static Geometry createBox(AssetManager assetManager, float width, float height, float depth, ColorRGBA color) {
         Box b = new Box(width, height, depth);
         Geometry geom = new Geometry("Box", b);
-
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", color);
-        geom.setMaterial(mat);
         return geom;
     }
     
@@ -43,11 +39,14 @@ public class ModelFactory {
      * @return 
      */
     public static Geometry createSphere(AssetManager assetManager, float radius, ColorRGBA color) {
-        Sphere sphere = new Sphere(9, 8, radius);
+        Sphere sphere = new Sphere(9, 16, radius);
         Geometry geom = new Geometry("Sphere", sphere);
 
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", color);
+        Material mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+        mat.setBoolean("UseMaterialColors", true);
+        mat.setColor("Diffuse", color);
+        mat.setColor("Ambient", color);
+        mat.setTexture("DiffuseMap", assetManager.loadTexture("Textures/ColoredTex/Monkey.png"));
         geom.setMaterial(mat);
         return geom;
     }

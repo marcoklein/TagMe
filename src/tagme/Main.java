@@ -4,6 +4,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.light.AmbientLight;
+import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
@@ -39,12 +40,16 @@ public class Main extends SimpleApplication {
         AmbientLight light = new AmbientLight();
         light.setColor(ColorRGBA.White.mult(2));
         rootNode.addLight(light);
+        DirectionalLight sun = new DirectionalLight();
+        sun.setColor(ColorRGBA.White);
+        sun.setDirection(new Vector3f(-.5f, -.5f, -.5f).normalizeLocal());
+        rootNode.addLight(sun);
 
         // set up physics
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
         //bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
-        bulletAppState.setDebugEnabled(true);
+        //bulletAppState.setDebugEnabled(true);
         
         // set up world
         Node worldNode = new Node();
@@ -74,8 +79,7 @@ public class Main extends SimpleApplication {
         obstacle = factory.createObstacle(obstacleGeom, 0.4f, new Vector3f(-5, 5, -3));
         world.addGameObject(obstacle);
         
-        Geometry playerGeom = ModelFactory.createSphere(assetManager, 1, ColorRGBA.Blue);
-        Spatial player = factory.createPlayer(playerGeom, new Vector3f(0, 10, 0));
+        Spatial player = factory.createPlayer(new Vector3f(0, 10, 0), ColorRGBA.Green);
         world.addGameObject(player);
     }
 
