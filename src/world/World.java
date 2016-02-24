@@ -50,6 +50,8 @@ public class World {
      * All Game Objects are added to the world node.
      */
     private Node worldNode;
+    
+    private int gameObjectId;
 
     public World(Application app, BulletAppState bulletAppState, Node worldNode) {
         this.app = app;
@@ -107,8 +109,15 @@ public class World {
         for (WorldListener listener : listeners) {
             listener.gameObjectAdded(entity);
         }
+        
+        // set id of entity
+        entity.setUserData("Id", generateGameObjectId());
 
         worldNode.attachChild(entity);
+    }
+    
+    private int generateGameObjectId() {
+        return gameObjectId++;
     }
     
     /**

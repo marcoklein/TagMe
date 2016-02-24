@@ -38,6 +38,9 @@ public class PlayerControl extends GameObjectControl implements ActionListener {
     private Vector3f tempVector2 = new Vector3f();
     private Vector3f tempVector3 = new Vector3f();
     
+    private int maxJumpsInAir = 2;
+    private int jumpsInAir = 0;
+    
     private Camera cam;
 
     public PlayerControl() {
@@ -122,6 +125,12 @@ public class PlayerControl extends GameObjectControl implements ActionListener {
         // get player geometry (could be implemented nicer - see todo on top)
         Geometry playerGeom = (Geometry) ((Node) spatial).getChild("PlayerGeometry");
         playerGeom.rotate(tpf * tempVector.x, 0, tpf * tempVector.z);
+        
+        // reset jump if on ground or not moved (f.i. sticked to wall)
+//        if (characterControl.getVelocity().lengthSquared() < 0.01f) {
+//            // not moved
+//            jumpsInAir = 0;
+//        }
     }
 
     @Override
@@ -160,7 +169,16 @@ public class PlayerControl extends GameObjectControl implements ActionListener {
                 }
                 break;
             case "CharJump":
-                characterControl.jump();
+                if (isPressed) {
+                    if (characterControl.isOnGround()) {
+                        jumpsInAir = 0;
+                    }
+                    if (jumpsInAir < maxJumpsInAir) {
+                        // perform jump action only on press
+                        jumpsInAir++;
+                        characterControl.getVelocity().addLocal(characterControl.getJumpForce());
+                    }
+                }
                 break;
         }
     }
