@@ -4,6 +4,7 @@ import com.jme3.app.Application;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import world.controls.PlayerControl;
 import com.jme3.scene.Spatial;
@@ -34,6 +35,10 @@ public class World {
      */
     private BulletAppState bulletAppState;
     /**
+     * The Size of the World
+     */
+    private Vector3f worldSize;
+    /**
      * List of all active players.
      */
     private ArrayList<Spatial> players;
@@ -44,25 +49,23 @@ public class World {
      */
     private ArrayList<Spatial> worldObjects;
     
-    private ArrayList<WorldListener> listeners;
-    
     /**
      * All Game Objects are added to the world node.
      */
     private Node worldNode;
 
-    public World(Application app, BulletAppState bulletAppState, Node worldNode) {
+    public World(Application app, BulletAppState bulletAppState, Node worldNode, Vector3f size) {
         this.app = app;
         this.bulletAppState = bulletAppState;
         this.worldNode = worldNode;
+        this.worldSize = size;
         initialize();
     }
     
-    private void initialize() {
+    public void initialize() {
         worldNode.detachAllChildren();
         players = new ArrayList<>();
         worldObjects = new ArrayList<>();
-        listeners = new ArrayList<>();
     }
     
     public void reset() {
@@ -103,10 +106,6 @@ public class World {
             LOG.log(Level.WARNING, "Could not add Game Object {0} because no appropriate control could be found - entity is no Game Object.", entity);
             return;
         }
-        
-        for (WorldListener listener : listeners) {
-            listener.gameObjectAdded(entity);
-        }
 
         worldNode.attachChild(entity);
     }
@@ -121,14 +120,6 @@ public class World {
         worldObjects.remove(entity);
         entity.removeFromParent();
         bulletAppState.getPhysicsSpace().remove(entity);
-        
-        for (WorldListener listener : listeners) {
-            listener.gameObjectRemoved(entity);
-        }
-    }
-    
-    public void addListener(WorldListener listener) {
-        listeners.add(listener);
     }
 
     public Application getApp() {
@@ -151,6 +142,8 @@ public class World {
         return worldNode;
     }
     
-    
+    public Vector3f getWorldSize() {
+        return worldSize;
+    }
     
 }

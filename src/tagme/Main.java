@@ -65,7 +65,7 @@ public class Main extends SimpleApplication {
         // set up world
         Node worldNode = new Node();
         rootNode.attachChild(worldNode);
-        world = new World(this, bulletAppState, worldNode);
+        world = new World(this, bulletAppState, worldNode, new Vector3f(50, 10, 50));
         world.addGameObject(ground);
         
 
