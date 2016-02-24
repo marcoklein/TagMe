@@ -1,11 +1,15 @@
 package world;
 
+import com.jme3.app.Application;
+import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Node;
 import world.controls.PlayerControl;
-import world.controls.ObstacleControl;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.control.Control;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import world.controls.WorldObjectControl;
 
 /**
  * Holds all GameObjects.
@@ -15,24 +19,50 @@ import java.util.ArrayList;
  * @author Marco Klein
  */
 public class World {
+    private static final Logger LOG = Logger.getLogger(World.class.getName());
     
+    /**
+     * Application object of the game holding the AssetManager and other
+     * important stuff.
+     */
+    private Application app;
+    /**
+     * Physics space of the world.
+     * All collision objects are added to it.
+     */
+    private BulletAppState bulletAppState;
+    /**
+     * List of all active players.
+     */
     private ArrayList<Spatial> players;
     
-    private ArrayList<Spatial> obstacles;
+    /**
+     * List of all world objects f.e. obstacles or items.
+     * I.e. everything that interacts with a player (block him or give him effects)
+     */
+    private ArrayList<Spatial> worldObjects;
     
-    private Node rootNode;
+    /**
+     * All Game Objects are added to the world node.
+     */
+    private Node worldNode;
 
-    public World(Node rootNode) {
-        this.rootNode = rootNode;
+    public World(Application app, BulletAppState bulletAppState, Node worldNode) {
+        this.app = app;
+        this.bulletAppState = bulletAppState;
+        this.worldNode = worldNode;
         initialize();
     }
     
     public void initialize() {
-        players = new ArrayList<Spatial>();
-        obstacles = new ArrayList<Spatial>();
+        worldNode.detachAllChildren();
+        players = new ArrayList<>();
+        worldObjects = new ArrayList<>();
     }
     
-    
+    public void reset() {
+        initialize();
+    }
     
     /**
      * Adds the given game object (in form of a Spatial) to the world.
@@ -40,18 +70,41 @@ public class World {
      * 
      * @param entity 
      */
-    public void addSpatial(Spatial entity) {
-        Control control = entity.getControl(PlayerControl.class);
-        if (control != null) {
+    public void addGameObject(Spatial entity) {
+        if (entity.getControl(PlayerControl.class) != null) {
             // add player with PlacerControl
+            bulletAppState.getPhysicsSpace().add(entity);
             players.add(entity);
-        } else {
-            control = entity.getControl(ObstacleControl.class);
-            if (control != null) {
-                // add obstacle with ObstacleControl
-                obstacles.add(entity);
+        } else if (entity.getControl(WorldObjectControl.class) != null) {
+            // add obstacle with ObstacleControl
+            RigidBodyControl bodyControl = entity.getControl(RigidBodyControl.class);
+            if (bodyControl != null) {
+                bulletAppState.getPhysicsSpace().add(entity);
+            } else {
+                LOG.warning("Obstacle Game Object with no RigidBodyControl added.");
             }
+            worldObjects.add(entity);
+        } else if (entity.getControl(RigidBodyControl.class) != null) {
+            bulletAppState.getPhysicsSpace().add(entity);
+        } else {
+            // invalid Game Object
+            LOG.log(Level.WARNING, "Could not add Game Object {0} because no appropriate control could be found - entity is no Game Object.", entity);
+            return;
         }
+
+        worldNode.attachChild(entity);
+    }
+    
+    /**
+     * Removes the given game object.
+     * 
+     * @param entity 
+     */
+    public void removeGameObject(Spatial entity) {
+        players.remove(entity);
+        worldObjects.remove(entity);
+        entity.removeFromParent();
+        bulletAppState.getPhysicsSpace().remove(entity);
     }
     
 }

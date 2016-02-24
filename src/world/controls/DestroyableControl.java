@@ -14,6 +14,14 @@ import com.jme3.scene.control.AbstractControl;
  * @author Marco Klein
  */
 public class DestroyableControl extends AbstractControl {
+    
+    /**
+     * Destroys the given spatial by removing it from its parent (with some
+     * cool animation?)
+     */
+    public void destroy() {
+        
+    }
 
     @Override
     protected void controlUpdate(float tpf) {
