@@ -4,6 +4,7 @@
  */
 package world.controls;
 
+import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -29,6 +30,7 @@ public class ObstacleControl extends WorldObjectControl {
     private Vector3f worldLocation;
     
     private Vector3f tempVector = new Vector3f();
+    private Vector3f tempVector2 = new Vector3f();
 
     public ObstacleControl() {
         this(0, new Vector3f());
@@ -67,20 +69,21 @@ public class ObstacleControl extends WorldObjectControl {
     }
     
     
-
     @Override
     protected void controlUpdate(float tpf) {
         if (movingToInitialLocation) {
-            // TODO move towards target location
             // calculate moving vector
             tempVector.set(worldLocation).subtractLocal(spatial.getLocalTranslation()).normalizeLocal().multLocal(movingToInitialLocationSpeed * tpf);
-            spatial.move(tempVector);
+            float distance = tempVector2.set(worldLocation).distanceSquared(spatial.getLocalTranslation());
             // check if obstacle reached its target location
-            float distance = tempVector.set(worldLocation).distanceSquared(spatial.getLocalTranslation());
-            if (distance < movingToInitialLocationSpeed * tpf) {
+            if (distance < 0.1) {
                 // reached target location
-                spatial.getLocalTranslation().set(tempVector);
+                spatial.setLocalTranslation(worldLocation.clone());
                 movingToInitialLocation = false;
+            } else {
+                // move just by moving the spatial
+                // move towards target location
+                spatial.setLocalTranslation(spatial.getLocalTranslation().add(tempVector));
             }
         }
     }

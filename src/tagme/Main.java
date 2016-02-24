@@ -3,6 +3,7 @@ package tagme;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.light.AmbientLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
@@ -32,10 +33,17 @@ public class Main extends SimpleApplication {
         ground.addControl(new RigidBodyControl(0));
         rootNode.attachChild(ground);
         flyCam.setMoveSpeed(40);
+        flyCam.setEnabled(false);
         
+        // add a light
+        AmbientLight light = new AmbientLight();
+        light.setColor(ColorRGBA.White.mult(2));
+        rootNode.addLight(light);
+
         // set up physics
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
+        //bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
         bulletAppState.setDebugEnabled(true);
         
         // set up world
@@ -44,26 +52,28 @@ public class Main extends SimpleApplication {
         world = new World(this, bulletAppState, worldNode);
         world.addGameObject(ground);
         
-        /******
-         * TEST Game Objects - remove it not used
+
+        /**
+         * ****
+         * TEST Game Objects - remove if not used
          *****/
         
         Geometry obstacleGeom = ModelFactory.createBox(assetManager, 3, 1, 3, ColorRGBA.Blue);
-        Spatial obstacle = GameObjectFactory.createObstacle(obstacleGeom, 1, new Vector3f(0, 5, 0));
+        Spatial obstacle = GameObjectFactory.createObstacle(world, obstacleGeom, 2, new Vector3f(0, 5, 0));
         world.addGameObject(obstacle);
         
         
         obstacleGeom = ModelFactory.createBox(assetManager, 6, 1, 3, ColorRGBA.Blue);
-        obstacle = GameObjectFactory.createObstacle(obstacleGeom, 0, new Vector3f(12, 5, 1));
+        obstacle = GameObjectFactory.createObstacle(world, obstacleGeom, 5, new Vector3f(12, 8, 1));
         world.addGameObject(obstacle);
         
         
         obstacleGeom = ModelFactory.createBox(assetManager, 3, 4, 3, ColorRGBA.Blue);
-        obstacle = GameObjectFactory.createObstacle(obstacleGeom, 3, new Vector3f(-5, 5, -3));
+        obstacle = GameObjectFactory.createObstacle(world, obstacleGeom, 0.4f, new Vector3f(-5, 5, -3));
         world.addGameObject(obstacle);
         
         Geometry playerGeom = ModelFactory.createSphere(assetManager, 1, ColorRGBA.Blue);
-        Spatial player = GameObjectFactory.createPlayer(playerGeom, new Vector3f(0, 10, 0));
+        Spatial player = GameObjectFactory.createPlayer(world, playerGeom, new Vector3f(0, 10, 0));
         world.addGameObject(player);
     }
 

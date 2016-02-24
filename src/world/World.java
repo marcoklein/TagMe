@@ -2,6 +2,7 @@ package world;
 
 import com.jme3.app.Application;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Node;
 import world.controls.PlayerControl;
@@ -9,6 +10,7 @@ import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import world.controls.GameObjectControl;
 import world.controls.WorldObjectControl;
 
 /**
@@ -71,21 +73,28 @@ public class World {
      * @param entity 
      */
     public void addGameObject(Spatial entity) {
+        GameObjectControl gameObjectEntity = entity.getControl(GameObjectControl.class);
+        if (gameObjectEntity != null) {
+            // set world of game object
+            gameObjectEntity.setWorld(this);
+        }
         if (entity.getControl(PlayerControl.class) != null) {
             // add player with PlacerControl
-            bulletAppState.getPhysicsSpace().add(entity);
+            bulletAppState.getPhysicsSpace().add(entity.getControl(BetterCharacterControl.class));
+            bulletAppState.getPhysicsSpace().addAll(entity);
             players.add(entity);
         } else if (entity.getControl(WorldObjectControl.class) != null) {
             // add obstacle with ObstacleControl
             RigidBodyControl bodyControl = entity.getControl(RigidBodyControl.class);
             if (bodyControl != null) {
-                bulletAppState.getPhysicsSpace().add(entity);
+                bulletAppState.getPhysicsSpace().add(bodyControl);
+                bulletAppState.getPhysicsSpace().addAll(entity);
             } else {
                 LOG.warning("Obstacle Game Object with no RigidBodyControl added.");
             }
             worldObjects.add(entity);
         } else if (entity.getControl(RigidBodyControl.class) != null) {
-            bulletAppState.getPhysicsSpace().add(entity);
+            bulletAppState.getPhysicsSpace().addAll(entity);
         } else {
             // invalid Game Object
             LOG.log(Level.WARNING, "Could not add Game Object {0} because no appropriate control could be found - entity is no Game Object.", entity);
@@ -106,5 +115,27 @@ public class World {
         entity.removeFromParent();
         bulletAppState.getPhysicsSpace().remove(entity);
     }
+
+    public Application getApp() {
+        return app;
+    }
+
+    public BulletAppState getBulletAppState() {
+        return bulletAppState;
+    }
+
+    public ArrayList<Spatial> getPlayers() {
+        return players;
+    }
+
+    public ArrayList<Spatial> getWorldObjects() {
+        return worldObjects;
+    }
+
+    public Node getWorldNode() {
+        return worldNode;
+    }
+    
+    
     
 }

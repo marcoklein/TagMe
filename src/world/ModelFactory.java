@@ -44,7 +44,7 @@ public class ModelFactory {
      */
     public static Geometry createSphere(AssetManager assetManager, float radius, ColorRGBA color) {
         Sphere sphere = new Sphere(9, 8, radius);
-        Geometry geom = new Geometry("Box", sphere);
+        Geometry geom = new Geometry("Sphere", sphere);
 
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", color);

@@ -26,11 +26,15 @@ public class GameObjectFactory {
      * to the returned Spatial.
      * @return 
      */
-    public static Spatial createPlayer(Geometry geometry, Vector3f startLocation) {
+    public static Spatial createPlayer(World world, Geometry geometry, Vector3f startLocation) {
         Node player = new Node();
         player.setLocalTranslation(startLocation);
-        player.addControl(new BetterCharacterControl(1, 1, 50));
-        player.addControl(new PlayerControl());
+        BetterCharacterControl characterControl = new BetterCharacterControl(0.3f, 2f, 1f);
+        characterControl.setJumpForce(new Vector3f(0, 400f, 0)); 
+        characterControl.setGravity(new Vector3f(0, 9.81f, 0));
+//        RigidBodyControl characterControl = new RigidBodyControl(1f);
+        player.addControl(characterControl);
+        player.addControl(new PlayerControl(world, 300));
         player.attachChild(geometry);
         return player;
     }
@@ -42,12 +46,14 @@ public class GameObjectFactory {
      * @param geometry
      * @return 
      */
-    public static Spatial createObstacle(Geometry geometry, float initialSpeed, Vector3f startTargetLocation) {
+    public static Spatial createObstacle(World world, Geometry geometry, float initialSpeed, Vector3f startTargetLocation) {
         Node obstacle = new Node();
+        obstacle.attachChild(geometry);
         obstacle.addControl(new ObstacleControl(initialSpeed, startTargetLocation));
         obstacle.addControl(new DestroyableControl());
-        obstacle.addControl(new RigidBodyControl(0));
-        obstacle.attachChild(geometry);
+        RigidBodyControl rigidControl = new RigidBodyControl(1);
+        obstacle.addControl(rigidControl);
+        rigidControl.setKinematic(true);
         return obstacle;
     }
     
