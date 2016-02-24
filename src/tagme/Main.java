@@ -13,8 +13,8 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.Random;
-import world.GameObjectFactory;
-import world.ModelFactory;
+import world.factory.GameObjectFactory;
+import world.factory.ModelFactory;
 import world.World;
 
 /**
@@ -76,7 +76,7 @@ public class Main extends SimpleApplication {
         
         GameObjectFactory factory = new GameObjectFactory(world);
         
-        initWorld(world, new Vector3f(200, 10, 200));
+        initWorld(world, new Vector3f(50, 10, 50));
         
         Spatial player = factory.createPlayer(new Vector3f(0, 10, 0), ColorRGBA.Green);
         world.addGameObject(player);
@@ -102,7 +102,7 @@ public class Main extends SimpleApplication {
         targetPosition.y = (float) random.nextInt((int) (worldSize.y * 1000)) / 1000f;
         targetPosition.z = (float) random.nextInt((int) (worldSize.z * 1000)) / 1000f;
         Geometry obstacleGeom = ModelFactory.createBox(assetManager, obstacleSize.x, obstacleSize.y, obstacleSize.z, ColorRGBA.Blue);
-        Spatial obstacle = factory.createObstacle(new Vector3f(targetPosition.x, 0, targetPosition.z), targetPosition, obstacleGeom, 0.2f);
+        Spatial obstacle = factory.createObstacle(new Vector3f(targetPosition.x, obstacleSize.y, targetPosition.z), targetPosition, obstacleGeom, 0.2f);
         // set start position of obstacle underneath the ground so it can rise up
         world.addGameObject(obstacle);
         return obstacle;

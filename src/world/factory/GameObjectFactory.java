@@ -2,9 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package world;
+package world.factory;
 
-import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.input.ChaseCamera;
@@ -14,6 +13,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import world.World;
 import world.controls.DestroyableControl;
 import world.controls.ObstacleControl;
 import world.controls.PlayerControl;
@@ -23,12 +23,10 @@ import world.controls.PlayerControl;
  *
  * @author Marco Klein
  */
-public class GameObjectFactory {
-    
-    private World world;
+public class GameObjectFactory extends WorldFactory {
 
     public GameObjectFactory(World world) {
-        this.world = world;
+        super(world);
     }
     
     /**
