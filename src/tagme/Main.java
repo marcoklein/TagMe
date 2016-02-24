@@ -44,8 +44,9 @@ public class Main extends SimpleApplication {
         
         // add a light
         AmbientLight light = new AmbientLight();
-        light.setColor(ColorRGBA.White.mult(2));
+        light.setColor(ColorRGBA.White);
         rootNode.addLight(light);
+        
         DirectionalLight sun = new DirectionalLight();
         sun.setColor(ColorRGBA.White);
         sun.setDirection(new Vector3f(-.5f, -.5f, -.5f).normalizeLocal());

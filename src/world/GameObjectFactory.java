@@ -93,7 +93,7 @@ public class GameObjectFactory {
 //        key.setGenerateMips(true);
 //        Texture tex  = world.getApp().getAssetManager().loadTexture(key);
 //        mat.setTexture("ColorMap", tex);
-        Material mat = world.getApp().getAssetManager().loadMaterial("Materials/player.j3m");
+        Material mat = world.getApp().getAssetManager().loadMaterial("Materials/obstacle.j3m");
         
         geometry.setMaterial(mat);
         return obstacle;
