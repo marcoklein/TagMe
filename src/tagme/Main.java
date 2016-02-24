@@ -58,22 +58,24 @@ public class Main extends SimpleApplication {
          * TEST Game Objects - remove if not used
          *****/
         
+        GameObjectFactory factory = new GameObjectFactory(world);
+        
         Geometry obstacleGeom = ModelFactory.createBox(assetManager, 3, 1, 3, ColorRGBA.Blue);
-        Spatial obstacle = GameObjectFactory.createObstacle(world, obstacleGeom, 2, new Vector3f(0, 5, 0));
+        Spatial obstacle = factory.createObstacle(obstacleGeom, 2, new Vector3f(0, 5, 0));
         world.addGameObject(obstacle);
         
         
         obstacleGeom = ModelFactory.createBox(assetManager, 6, 1, 3, ColorRGBA.Blue);
-        obstacle = GameObjectFactory.createObstacle(world, obstacleGeom, 5, new Vector3f(12, 8, 1));
+        obstacle = factory.createObstacle(obstacleGeom, 5, new Vector3f(12, 8, 1));
         world.addGameObject(obstacle);
         
         
         obstacleGeom = ModelFactory.createBox(assetManager, 3, 4, 3, ColorRGBA.Blue);
-        obstacle = GameObjectFactory.createObstacle(world, obstacleGeom, 0.4f, new Vector3f(-5, 5, -3));
+        obstacle = factory.createObstacle(obstacleGeom, 0.4f, new Vector3f(-5, 5, -3));
         world.addGameObject(obstacle);
         
         Geometry playerGeom = ModelFactory.createSphere(assetManager, 1, ColorRGBA.Blue);
-        Spatial player = GameObjectFactory.createPlayer(world, playerGeom, new Vector3f(0, 10, 0));
+        Spatial player = factory.createPlayer(playerGeom, new Vector3f(0, 10, 0));
         world.addGameObject(player);
     }
 

@@ -6,7 +6,6 @@ package world.controls;
 
 import com.jme3.app.Application;
 import com.jme3.bullet.control.BetterCharacterControl;
-import com.jme3.input.ChaseCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
@@ -15,7 +14,10 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
+import com.jme3.scene.CameraNode;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.control.CameraControl;
 import world.World;
 
 /**
@@ -59,9 +61,10 @@ public class PlayerControl extends GameObjectControl implements ActionListener {
             if (characterControl == null) {
                 throw new UnsupportedOperationException("Player needs a BetterCharacterControl.class.");
             }
+            Application app = world.getApp();
             
             // set up key bindings
-            InputManager inputManager = world.getApp().getInputManager();
+            InputManager inputManager = app.getInputManager();
             inputManager.addMapping("CharLeft", new KeyTrigger(KeyInput.KEY_A));
             inputManager.addMapping("CharRight", new KeyTrigger(KeyInput.KEY_D));
             inputManager.addMapping("CharForward", new KeyTrigger(KeyInput.KEY_W));
@@ -72,11 +75,9 @@ public class PlayerControl extends GameObjectControl implements ActionListener {
             inputManager.addListener(this, "CharJump");
             
             // set up camera
-            Application app = world.getApp();
-            ChaseCamera chaseCamera = new ChaseCamera(app.getCamera(), spatial, inputManager);
-            
-            
             cam = app.getCamera();
+
+            
         }
     }
     
