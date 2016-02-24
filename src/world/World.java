@@ -1,5 +1,6 @@
 package world;
 
+import com.jme3.scene.Node;
 import world.controls.PlayerControl;
 import world.controls.ObstacleControl;
 import com.jme3.scene.Spatial;
@@ -18,6 +19,20 @@ public class World {
     private ArrayList<Spatial> players;
     
     private ArrayList<Spatial> obstacles;
+    
+    private Node rootNode;
+
+    public World(Node rootNode) {
+        this.rootNode = rootNode;
+        initialize();
+    }
+    
+    public void initialize() {
+        players = new ArrayList<Spatial>();
+        obstacles = new ArrayList<Spatial>();
+    }
+    
+    
     
     /**
      * Adds the given game object (in form of a Spatial) to the world.
