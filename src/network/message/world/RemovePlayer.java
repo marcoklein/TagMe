@@ -14,7 +14,6 @@ public class RemovePlayer extends WorldMessage {
 
     @Override
     public void applyToWorld(World world) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

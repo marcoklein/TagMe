@@ -135,6 +135,15 @@ public class World {
     }
     
     /**
+     * Calls removeGameObject(gameObjects.get(id)).
+     * 
+     * @param id 
+     */
+    public void removeGameObject(int id) {
+        removeGameObject(gameObjects.get(id));
+    }
+    
+    /**
      * Removes the given game object.
      * 
      * @param entity 
