@@ -38,7 +38,6 @@ public class ClientMain extends SimpleApplication {
         Spatial ground = assetManager.loadModel("Models/newScene.j3o");
         ground.setLocalTranslation(100, 0, 100);
         ground.addControl(new RigidBodyControl(0));
-        rootNode.attachChild(ground);
         flyCam.setMoveSpeed(40);
         flyCam.setEnabled(false);
         // remove the fly cam completly since it would interfere with the game

@@ -76,7 +76,7 @@ public class World {
         worldObjects = new ArrayList<>();
         listeners = new ArrayList<>();
         gameObjects = new HashMap<>();
-        bulletAppState.getPhysicsSpace().destroy();
+//        bulletAppState.getPhysicsSpace().destroy();
         worldSize = new Vector3f();
     }
     
