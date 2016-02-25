@@ -36,7 +36,7 @@ public class World {
      * All GameObjects mapped to their id.
      * Get a game object id by calling gameObject.getUserData("Id")
      */
-    private HashMap<Integer, Spatial> gameObjects;
+    private HashMap<Integer, Node> gameObjects;
     
     private ArrayList<WorldListener> listeners;
     
@@ -81,7 +81,7 @@ public class World {
      * @param gameObjects
      * @return 
      */
-    public int[] addGameObjects(Spatial[] gameObjects) {
+    public int[] addGameObjects(Node[] gameObjects) {
         int ids[] = new int[gameObjects.length];
         for (int i = 0; i < gameObjects.length; i++) {
             ids[i] = addGameObject(gameObjects[i]);
@@ -95,7 +95,7 @@ public class World {
      * 
      * @param gameObject 
      */
-    public int addGameObject(Spatial gameObject) {
+    public int addGameObject(Node gameObject) {
         Integer id;
         if ((id = gameObject.getUserData("Id")) != null) {
             return addGameObject(gameObject, id);
@@ -103,7 +103,7 @@ public class World {
         return addGameObject(gameObject, generateGameObjectId());
     }
     
-    public int addGameObject(Spatial gameObject, int id) {
+    public int addGameObject(Node gameObject, int id) {
         WorldControl gameObjectEntity = gameObject.getControl(WorldControl.class);
         if (gameObjectEntity != null) {
             // set world of game object
@@ -153,13 +153,13 @@ public class World {
         
     }
     
-    public Spatial getGameObject(int id) {
+    public Node getGameObject(int id) {
         return gameObjects.get(id);
     }
     
-    public Spatial[] getGameObjects() {
-        Collection<Spatial> collection = gameObjects.values();
-        Spatial[] spatials = collection.toArray(new Spatial[collection.size()]);
+    public Node[] getGameObjects() {
+        Collection<Node> collection = gameObjects.values();
+        Node[] spatials = collection.toArray(new Node[collection.size()]);
         return spatials;
         
     }

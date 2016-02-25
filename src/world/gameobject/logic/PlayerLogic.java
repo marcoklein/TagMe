@@ -57,5 +57,11 @@ public class PlayerLogic extends Logic {
         // add physics
         world.getBulletAppState().getPhysicsSpace().addAll(player);
     }
+
+    @Override
+    public void removeLogic(World world, Node gameObject) {
+        // TODO remove player logic
+        throw new UnsupportedOperationException("You should not remove a Player logic. (Unsupported)");
+    }
     
 }

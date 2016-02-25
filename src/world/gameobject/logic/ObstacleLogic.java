@@ -38,5 +38,11 @@ public class ObstacleLogic extends Logic {
         obstacle.addControl(new ObstacleControl(initialSpeed, targetLocation));
         obstacle.addControl(new RigidBodyControl(0));
     }
+
+    @Override
+    public void removeLogic(World world, Node obstacle) {
+        obstacle.removeControl(ObstacleControl.class);
+        obstacle.removeControl(RigidBodyControl.class);
+    }
     
 }

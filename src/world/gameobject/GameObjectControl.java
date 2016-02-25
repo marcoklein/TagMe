@@ -1,10 +1,11 @@
-package world.control;
+package world.gameobject;
 
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
+import java.util.ArrayList;
 import world.World;
 import world.gameobject.logic.Logic;
 import world.gameobject.model.Model;
@@ -24,6 +25,11 @@ public class GameObjectControl extends AbstractControl {
     
     protected Model model;
     protected Logic logic;
+    
+    /**
+     * List of game objects which are attached to this game object.
+     */
+    protected ArrayList<Node> attachedGameObjects;
 
     public GameObjectControl() {
     }
@@ -35,6 +41,18 @@ public class GameObjectControl extends AbstractControl {
     public GameObjectControl(Model model, Logic logic) {
         this.model = model;
         this.logic = logic;
+    }
+    
+    public void attachGameObject(Node gameObject) {
+        attachedGameObjects.add(gameObject);
+    }
+    
+    public void detachGameObject(int id) {
+        detachGameObject(world.getGameObject(id));
+    }
+    
+    public void detachGameObject(Node gameObject) {
+        
     }
     
     @Override
