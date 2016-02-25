@@ -10,9 +10,11 @@ import network.message.world.RemoveGameObjectMessage;
 import network.message.world.UpdateGameObjectPositionMessage;
 import network.message.world.UpdateLogicMessage;
 import network.message.world.UpdateModelMessage;
+import world.gameobject.logic.ObstacleLogic;
 import world.gameobject.logic.PlayerLogic;
 import world.gameobject.logic.StaticPhysicsLogic;
 import world.gameobject.model.GroundModel;
+import world.gameobject.model.ObstacleModel;
 import world.gameobject.model.PlayerModel;
 
 /**
@@ -39,11 +41,13 @@ public class NetworkSerializer {
         // model
         Serializer.registerClass(PlayerModel.class);
         Serializer.registerClass(GroundModel.class);
+        Serializer.registerClass(ObstacleModel.class);
         
         
         // logic
         Serializer.registerClass(PlayerLogic.class);
         Serializer.registerClass(StaticPhysicsLogic.class);
+        Serializer.registerClass(ObstacleLogic.class);
         
         
     }

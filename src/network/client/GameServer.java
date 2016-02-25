@@ -15,6 +15,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,9 +34,11 @@ import world.World;
 import world.WorldListener;
 import world.control.LogicControl;
 import world.control.ModelControl;
+import world.gameobject.logic.ObstacleLogic;
 import world.gameobject.logic.PlayerLogic;
 import world.gameobject.logic.StaticPhysicsLogic;
 import world.gameobject.model.GroundModel;
+import world.gameobject.model.ObstacleModel;
 import world.gameobject.model.PlayerModel;
 
 /**
@@ -54,6 +57,8 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
     
     private Application app;
     private Server server;
+    
+    private Random random = new Random();
     
     private ArrayList<HostedConnection> identifiedConnections = new ArrayList<>();
 
@@ -87,9 +92,37 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
         ground.addControl(new LogicControl(world, new StaticPhysicsLogic()));
         world.addGameObject(ground);
         
-//        Node obstacle = new Node();
-//        ground.addControl(new ModelControl(world, new ObstacleModel()));
-//        ground.addControl(new LogicControl(world, new ObstacleLogic()));
+        Node obstacle = new Node();
+        obstacle.addControl(new ModelControl(world, new ObstacleModel(new Vector3f(20, 20, 20))));
+        obstacle.addControl(new LogicControl(world, new ObstacleLogic(new Vector3f(20, 20, 20), 0, new Vector3f(20, 20, 20))));
+        world.addGameObject(obstacle);
+        
+        
+        initObstacles();
+        LOG.info("World initialized.");
+    }
+    
+    private void initObstacles() {
+        Vector3f worldSize = new Vector3f(200, 40, 200);
+        for (int i = 0; i < 200; i++) {
+            Vector3f obstacleSize = new Vector3f();
+            obstacleSize.x = (float) (random.nextInt(1000) + 10) / 100f;
+            obstacleSize.y = (float) (random.nextInt(400) + 10) / 100f;
+            obstacleSize.z = (float) (random.nextInt(1000) + 10) / 100f;
+            
+            Vector3f targetPosition = new Vector3f();
+            // get a random position
+            targetPosition.x = (float) random.nextInt((int) (worldSize.x * 1000)) / 1000f;
+            targetPosition.y = (float) random.nextInt((int) (worldSize.y * 1000)) / 1000f;
+            targetPosition.z = (float) random.nextInt((int) (worldSize.z * 1000)) / 1000f;
+            
+            Node obstacle = new Node();
+            obstacle.addControl(new ModelControl(world, new ObstacleModel(obstacleSize)));
+            obstacle.addControl(new LogicControl(world, new ObstacleLogic(targetPosition, 0, targetPosition)));
+            
+            
+            world.addGameObject(obstacle);
+        }
     }
 
     @Override
@@ -120,6 +153,7 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
                     
                     // prepare the init world message
                     InitWorldMessage message = new InitWorldMessage(world.getWorldSize(), world.getGameObjects());
+                    LOG.info("Sending " + world.getGameObjects().length + " game objects.");
                     source.send(message);
                     
                     

@@ -3,6 +3,7 @@ package network.message.world;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import world.World;
 
@@ -21,7 +22,7 @@ public class UpdateGameObjectPositionMessage extends GameObjectMessage {
 
     public UpdateGameObjectPositionMessage(Spatial gameObject) {
         super((int) gameObject.getUserData("Id"), false);
-        this.rotation = gameObject.getLocalRotation();
+        this.rotation = ((Node) gameObject).getChild("Model").getLocalRotation();
         this.location = gameObject.getLocalTranslation();
     }
     
@@ -33,7 +34,7 @@ public class UpdateGameObjectPositionMessage extends GameObjectMessage {
 
     @Override
     public void applyToGameObject(World world, Spatial gameObject) {
-        gameObject.setLocalRotation(rotation);
+        ((Node) gameObject).getChild("Model").setLocalRotation(rotation);
         gameObject.setLocalTranslation(location);
     }
     

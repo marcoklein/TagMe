@@ -45,6 +45,10 @@ public class ObstacleControl extends WorldObjectControl {
     public ObstacleControl(float movingToInitialLocationSpeed, Vector3f worldLocation) {
         this.movingToInitialLocationSpeed = movingToInitialLocationSpeed;
         this.worldLocation = worldLocation;
+        if (movingToInitialLocationSpeed == 0) {
+            // do not move if speed is 0
+            movingToInitialLocation = false;
+        }
     }
 
 

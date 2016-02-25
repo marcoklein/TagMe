@@ -86,11 +86,11 @@ public class GameObjectFactory extends WorldFactory {
         // add an obstacle material
 //        Material mat = new Material(world.getApp().getAssetManager(), "Materials/player.j3m");
 //        TextureKey key = new TextureKey("Textures/Terrain/BrickWall/BrickWall.jpg");
-//        key.setGenerateMips(true);
 //        Texture tex  = world.getApp().getAssetManager().loadTexture(key);
 //        mat.setTexture("ColorMap", tex);
         Material mat = world.getApp().getAssetManager().loadMaterial("Materials/obstacle.j3m");
-        
+        //        key.setGenerateMips(true);
+
         geometry.setMaterial(mat);
         return obstacle;
     }
