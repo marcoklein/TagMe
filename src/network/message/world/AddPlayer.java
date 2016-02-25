@@ -19,6 +19,9 @@ public class AddPlayer extends WorldMessage {
     private Vector3f startLocation;
     private ColorRGBA color;
 
+    public AddPlayer() {
+    }
+
     public AddPlayer(int id, String playerName, Vector3f startLocation, ColorRGBA color) {
         this.id = id;
         this.playerName = playerName;
