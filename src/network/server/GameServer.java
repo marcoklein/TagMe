@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 import network.NetworkAppState;
 import network.NetworkSerializer;
 import network.gamemode.GameModeManager;
+import network.gamemode.TagGameMode;
 import network.message.IdentificationMessage;
 import network.message.NewPlayerMessage;
 import network.message.SetPlayerMessage;
@@ -100,9 +101,11 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
         obstacle.addControl(new GameObjectControl(world, new ObstacleModel(new Vector3f(20, 20, 20)), new ObstacleLogic(new Vector3f(20, 20, 20), 0, new Vector3f(20, 20, 20))));
         world.addGameObject(obstacle);
         
-        
         initObstacles();
         LOG.info("World initialized.");
+        
+        // set up game mode
+        gameModeManager.changeGameMode(new TagGameMode());
     }
     
     private void initObstacles() {

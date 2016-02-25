@@ -8,20 +8,20 @@ import world.GameObjectControl;
  */
 public class TagGameMode extends GameMode {
 
-    public TagGameMode(GameModeManager manager) {
-        super(manager);
-    }
 
     @Override
     public void playerJoined(GameObjectControl player) {
+        System.out.println("Player joined");
     }
 
     @Override
     public void playerLeft(GameObjectControl player) {
+        System.out.println("Player left");
     }
 
     @Override
     public void playerCollision(GameObjectControl playerA, GameObjectControl playerB) {
+        System.out.println("Collision");
     }
 
     
