@@ -80,7 +80,6 @@ public class GameObjectFactory extends WorldFactory {
         obstacle.setLocalTranslation(startLocation);
         obstacle.attachChild(geometry);
         obstacle.addControl(new ObstacleControl(initialSpeed, startTargetLocation));
-        obstacle.addControl(new DestroyableControl());
         RigidBodyControl rigidControl = new RigidBodyControl(1);
         obstacle.addControl(rigidControl);
         rigidControl.setKinematic(true);

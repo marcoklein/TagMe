@@ -4,9 +4,11 @@
  */
 package network.message.world;
 
+import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import world.ObstacleBuilder;
 import world.World;
@@ -49,11 +51,14 @@ public class AddObstacleMessage extends GameObjectMessage {
                 .setColor(color)
                 .setSlideIn(slideIn)
                 .size(size);
-        Spatial obstacle = builder.buildObstacle(world);
+        // add obstacle geometry
+        Node obstacle = new Node();
+        obstacle.attachChild(builder.buildGeometry(world));
         if (location != null) {
             // set current location if one is given
             obstacle.setLocalTranslation(targetLocation);
         }
+        obstacle.addControl(new RigidBodyControl(0));
         world.addGameObject(obstacle, id);
     }
     
