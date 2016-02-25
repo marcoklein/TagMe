@@ -5,6 +5,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import world.GameObjectControl;
 import world.World;
 
 /**
@@ -33,8 +34,8 @@ public class UpdateGameObjectPositionMessage extends GameObjectMessage {
     }
 
     @Override
-    public void applyToGameObject(World world, Spatial gameObject) {
-        ((Node) gameObject).getChild("Model").setLocalRotation(rotation);
+    public void applyToGameObject(World world, Node gameObject, GameObjectControl gameObjectControl) {
+        gameObjectControl.getModelNode().setLocalRotation(rotation);
         gameObject.setLocalTranslation(location);
     }
     

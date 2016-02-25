@@ -20,6 +20,12 @@ public class AddGameObjectMessage extends GameObjectMessage {
 
     public AddGameObjectMessage() {
     }
+    
+    public AddGameObjectMessage(GameObjectControl gameObjectControl) {
+        id = gameObjectControl.getId();
+        logic = gameObjectControl.getLogic();
+        model = gameObjectControl.getModel();
+    }
 
     public AddGameObjectMessage(Node gameObject) {
         id = (int) gameObject.getUserData("Id");

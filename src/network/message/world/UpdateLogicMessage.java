@@ -6,9 +6,8 @@ package network.message.world;
 
 import com.jme3.network.serializing.Serializable;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
+import world.GameObjectControl;
 import world.World;
-import world.control.LogicControl;
 import world.gameobject.logic.Logic;
 
 /**
@@ -29,15 +28,10 @@ public class UpdateLogicMessage extends GameObjectMessage {
         this.logic = logic;
     }
     
+
     @Override
-    public void applyToGameObject(World world, Spatial gameObject) {
-        LogicControl logicControl = gameObject.getControl(LogicControl.class);
-        if (logicControl == null) {
-            logicControl = new LogicControl(world, logic);
-            gameObject.addControl(logicControl);
-        } else {
-            logicControl.setLogic(logic);
-        }
+    public void applyToGameObject(World world, Node gameObject, GameObjectControl gameObjectControl) {
+        gameObjectControl.setLogic(logic);
     }
     
 }

@@ -5,7 +5,8 @@
 package network.message.world;
 
 import com.jme3.network.serializing.Serializable;
-import com.jme3.scene.Spatial;
+import com.jme3.scene.Node;
+import world.GameObjectControl;
 import world.World;
 
 /**
@@ -24,7 +25,7 @@ public class RemoveGameObjectMessage extends GameObjectMessage {
     }
 
     @Override
-    public void applyToGameObject(World world, Spatial gameObject) {
+    public void applyToGameObject(World world, Node gameObject, GameObjectControl gameObjectControl) {
         world.removeGameObject(id);
     }
     

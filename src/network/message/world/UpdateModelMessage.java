@@ -5,9 +5,9 @@
 package network.message.world;
 
 import com.jme3.network.serializing.Serializable;
-import com.jme3.scene.Spatial;
+import com.jme3.scene.Node;
+import world.GameObjectControl;
 import world.World;
-import world.control.ModelControl;
 import world.gameobject.model.Model;
 
 /**
@@ -26,10 +26,10 @@ public class UpdateModelMessage extends GameObjectMessage {
         super(id);
         this.model = model;
     }
-    
+
     @Override
-    public void applyToGameObject(World world, Spatial gameObject) {
-        gameObject.getControl(ModelControl.class).setModel(model);
+    public void applyToGameObject(World world, Node gameObject, GameObjectControl gameObjectControl) {
+        gameObjectControl.setModel(model);
     }
     
 }
