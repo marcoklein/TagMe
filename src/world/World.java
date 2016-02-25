@@ -63,9 +63,8 @@ public class World {
     
     private int gameObjectId;
 
-    public World(Application app, BulletAppState bulletAppState, Node worldNode) {
+    public World(Application app, Node worldNode) {
         this.app = app;
-        this.bulletAppState = bulletAppState;
         this.worldNode = worldNode;
         initialize();
     }
@@ -76,8 +75,13 @@ public class World {
         worldObjects = new ArrayList<>();
         listeners = new ArrayList<>();
         gameObjects = new HashMap<>();
-//        bulletAppState.getPhysicsSpace().destroy();
         worldSize = new Vector3f();
+                
+        // init physics
+        app.getStateManager().detach(bulletAppState);
+        bulletAppState = new BulletAppState();
+        app.getStateManager().attach(bulletAppState);
+        
     }
     
     public void reset() {
