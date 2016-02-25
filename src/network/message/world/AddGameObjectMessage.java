@@ -28,7 +28,7 @@ public class AddGameObjectMessage extends GameObjectMessage {
     }
 
     public AddGameObjectMessage(Node gameObject) {
-        id = (int) gameObject.getUserData("Id");
+        this(gameObject.getControl(GameObjectControl.class));
     }
 
     public AddGameObjectMessage(Logic logic, Model model, int id) {

@@ -22,7 +22,7 @@ public class GameObjectControl extends AbstractControl {
     protected Node gameObject;
     
     protected Model model;
-    protected Node modelNode;
+    protected Spatial modelNode;
     
     protected Logic logic;
     
@@ -77,14 +77,14 @@ public class GameObjectControl extends AbstractControl {
                 // remove model node if existing
                 modelNode.removeFromParent();
             }
-            modelNode = new Node("Model");
-            modelNode.attachChild(model.createModel(world));
+            modelNode = model.createModel(world);
+            modelNode.setName("Model");
             
             gameObject.attachChild(modelNode);
         }
     }
 
-    public Node getModelNode() {
+    public Spatial getModelNode() {
         return modelNode;
     }
 
