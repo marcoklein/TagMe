@@ -11,6 +11,10 @@ import com.jme3.scene.Spatial;
 public abstract class GameMode {
     
     protected Server server;
+
+    public GameMode(Server server) {
+        this.server = server;
+    }
     
     
     public abstract void playerCollision(Spatial playerA, Spatial playerB);

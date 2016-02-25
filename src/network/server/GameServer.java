@@ -20,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import network.NetworkAppState;
 import network.NetworkSerializer;
+import network.gamemode.GameModeManager;
 import network.message.IdentificationMessage;
 import network.message.NewPlayerMessage;
 import network.message.SetPlayerMessage;
@@ -59,10 +60,13 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
     private Random random = new Random();
     
     private ArrayList<HostedConnection> identifiedConnections = new ArrayList<>();
+    
+    private GameModeManager gameModeManager;
 
     public GameServer(World world) {
         super(world);
         NetworkSerializer.registerClasses();
+        gameModeManager = new GameModeManager(server, world);
     }
 
     @Override
@@ -75,6 +79,9 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
             Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
         }
         server.start();
+        
+        // add a game mode state
+        stateManager.attach(gameModeManager);
         
         // add listeners
         server.addMessageListener(this);
@@ -122,10 +129,19 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
 
     @Override
     public void stateDetached(AppStateManager stateManager) {
+        stateManager.detach(gameModeManager);
         server.removeMessageListener(this);
         // cleanup
         server.close();
     }
+
+    @Override
+    public void cleanup() {
+        super.cleanup();
+        server.close();
+    }
+    
+    
 
     @Override
     public void messageReceived(final HostedConnection source, final Message m) {
