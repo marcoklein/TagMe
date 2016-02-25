@@ -184,6 +184,10 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
                     
                     // inform other players about player
                     server.broadcast(Filters.notEqualTo(source), new NewPlayerMessage(identification.getPlayerName(), id));
+                    
+                    // add player to game mode manager
+                    gameModeManager.addPlayer(playerNode.getControl(GameObjectControl.class));
+                    
                     LOG.info("Player joined game.");
                     
                     identifiedConnections.add(source);
@@ -209,6 +213,7 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
         // remove player
         if (identifiedConnections.contains(conn)) {
             identifiedConnections.remove(conn);
+            gameModeManager.removePlayer(world.getGameObjectControl((int) conn.getAttribute("PlayerId")));
             world.removeGameObject((int) conn.getAttribute("PlayerId"));
         }
     }

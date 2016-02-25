@@ -1,7 +1,6 @@
 package network.gamemode;
 
-import com.jme3.network.Server;
-import com.jme3.scene.Spatial;
+import world.GameObjectControl;
 
 /**
  *
@@ -9,12 +8,22 @@ import com.jme3.scene.Spatial;
  */
 public class TagGameMode extends GameMode {
 
-    public TagGameMode(Server server) {
-        super(server);
+    public TagGameMode(GameModeManager manager) {
+        super(manager);
     }
-    
+
     @Override
-    public void playerCollision(Spatial playerA, Spatial playerB) {
+    public void playerJoined(GameObjectControl player) {
     }
+
+    @Override
+    public void playerLeft(GameObjectControl player) {
+    }
+
+    @Override
+    public void playerCollision(GameObjectControl playerA, GameObjectControl playerB) {
+    }
+
+    
     
 }

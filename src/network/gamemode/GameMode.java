@@ -1,7 +1,7 @@
 package network.gamemode;
 
 import com.jme3.network.Server;
-import com.jme3.scene.Spatial;
+import world.GameObjectControl;
 
 /**
  * Marco Klein
@@ -11,13 +11,18 @@ import com.jme3.scene.Spatial;
 public abstract class GameMode {
     
     protected Server server;
+    
+    protected GameModeManager manager;
 
-    public GameMode(Server server) {
-        this.server = server;
+    public GameMode(GameModeManager manager) {
+        this.manager = manager;
+        this.server = manager.getServer();
     }
+
+    public abstract void playerJoined(GameObjectControl player);
+    public abstract void playerLeft(GameObjectControl player);
     
-    
-    public abstract void playerCollision(Spatial playerA, Spatial playerB);
+    public abstract void playerCollision(GameObjectControl playerA, GameObjectControl playerB);
     
     
 }
