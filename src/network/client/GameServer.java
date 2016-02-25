@@ -12,6 +12,7 @@ import com.jme3.network.MessageListener;
 import com.jme3.network.Network;
 import com.jme3.network.Server;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -21,15 +22,20 @@ import network.NetworkAppState;
 import network.NetworkSerializer;
 import network.message.IdentificationMessage;
 import network.message.NewPlayerMessage;
+import network.message.SetPlayerMessage;
+import network.message.world.AddGameObjectMessage;
 import network.message.world.InitWorldMessage;
-import network.message.world.UpdateGameObjectPosition;
+import network.message.world.RemoveGameObjectMessage;
+import network.message.world.UpdateGameObjectPositionMessage;
 import network.message.world.UpdateLogicMessage;
-import network.message.world.UpdateModelMessage;
 import network.message.world.WorldMessage;
 import world.World;
+import world.WorldListener;
 import world.control.LogicControl;
 import world.control.ModelControl;
 import world.gameobject.logic.PlayerLogic;
+import world.gameobject.logic.StaticPhysicsLogic;
+import world.gameobject.model.GroundModel;
 import world.gameobject.model.PlayerModel;
 
 /**
@@ -39,11 +45,12 @@ import world.gameobject.model.PlayerModel;
  *
  * @author Marco Klein
  */
-public class GameServer extends NetworkAppState implements MessageListener<HostedConnection>, ConnectionListener {
+public class GameServer extends NetworkAppState implements MessageListener<HostedConnection>, ConnectionListener, WorldListener {
     private static final Logger LOG = Logger.getLogger(GameServer.class.getName());
     public static final String NAME = "TagMe";
     public static final int VERSION = 1;
-    public static final int PORT = 5110;
+    public static final int TCP_PORT = 5110;
+    public static final int UDP_PORT = 5111;
     
     private Application app;
     private Server server;
@@ -57,11 +64,10 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
 
     @Override
     public void stateAttached(AppStateManager stateManager) {
-        int port = 5110;
         app = stateManager.getApplication();
         // initialize
         try {
-            server = Network.createServer(NAME, VERSION, PORT, PORT);
+            server = Network.createServer(NAME, VERSION, TCP_PORT, UDP_PORT);
         } catch (IOException ex) {
             Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -69,7 +75,21 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
         
         // add listeners
         server.addMessageListener(this);
-        LOG.log(Level.INFO, "Server created and started on port {0}", port);
+        server.addConnectionListener(this);
+        LOG.log(Level.INFO, "Server created and started on port {0}", TCP_PORT);
+        
+        // TODO add listener again when world gets reset
+        world.addListener(this);
+        
+        // initialize world
+        Node ground = new Node();
+        ground.addControl(new ModelControl(world, new GroundModel()));
+        ground.addControl(new LogicControl(world, new StaticPhysicsLogic()));
+        world.addGameObject(ground);
+        
+//        Node obstacle = new Node();
+//        ground.addControl(new ModelControl(world, new ObstacleModel()));
+//        ground.addControl(new LogicControl(world, new ObstacleLogic()));
     }
 
     @Override
@@ -81,7 +101,7 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
 
     @Override
     public void messageReceived(final HostedConnection source, final Message m) {
-        if (m instanceof UpdateGameObjectPosition) {
+        if (m instanceof UpdateGameObjectPositionMessage) {
             // broadcast location updates
             // TODO test if client is allowed to update object
             server.broadcast(Filters.notEqualTo(source), m);
@@ -97,14 +117,17 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
 
                 @Override
                 public Void call() throws Exception {
+                    
+                    // prepare the init world message
+                    InitWorldMessage message = new InitWorldMessage(world.getWorldSize(), world.getGameObjects());
+                    source.send(message);
+                    
+                    
                     // add a player model to the client
                     Node playerNode = new Node();
                     playerNode.addControl(new ModelControl(world, new PlayerModel(ColorRGBA.White)));
                     int id = world.addGameObject(playerNode);
                     
-                    // prepare the init world message
-                    InitWorldMessage message = new InitWorldMessage(world.getWorldSize(), world.getGameObjects());
-                    source.send(message);
                     //int id = world.generateGameObjectId();
                     source.setAttribute("PlayerId", id);
                     
@@ -112,10 +135,13 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
 //                    source.send(new UpdateModelMessage(new PlayerModel(ColorRGBA.White), id));
                     UpdateLogicMessage playerMsg = new UpdateLogicMessage(new PlayerLogic(new Vector3f(0, 50, 0)), id);
                     source.send(playerMsg);
+                    source.send(new SetPlayerMessage(id));
                     
                     // inform other players about player
                     server.broadcast(Filters.notEqualTo(source), new NewPlayerMessage(identification.getPlayerName(), id));
                     LOG.info("Player joined game.");
+                    
+                    identifiedConnections.add(source);
                     return null;
                 }
                 
@@ -134,11 +160,25 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
 
     @Override
     public void connectionRemoved(Server server, HostedConnection conn) {
+        LOG.info("Client disconnected.");
         // remove player
         if (identifiedConnections.contains(conn)) {
             identifiedConnections.remove(conn);
             world.removeGameObject((int) conn.getAttribute("PlayerId"));
         }
+    }
+
+    @Override
+    public void gameObjectAdded(Spatial gameObject) {
+        LOG.info("Adding GameObject to world.");
+        // inform clients
+        server.broadcast(new AddGameObjectMessage(gameObject));
+    }
+
+    @Override
+    public void gameObjectRemoved(Spatial gameObject) {
+        LOG.info("Removing GameObject from world.");
+        server.broadcast(new RemoveGameObjectMessage((int) gameObject.getUserData("Id")));
     }
 
     

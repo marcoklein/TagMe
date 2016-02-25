@@ -53,6 +53,9 @@ public class PlayerLogic extends Logic {
         ChaseCamera cam = new ChaseCamera(world.getApp().getCamera(), model, world.getApp().getInputManager());
         cam.setDragToRotate(false);
         cam.setInvertVerticalAxis(true);
+        
+        // add physics
+        world.getBulletAppState().getPhysicsSpace().addAll(player);
     }
     
 }

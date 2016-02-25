@@ -14,5 +14,13 @@ import world.World;
  */
 @Serializable
 public abstract class WorldMessage extends AbstractMessage {
+
+    public WorldMessage() {
+    }
+
+    public WorldMessage(boolean reliable) {
+        super(reliable);
+    }
+    
     public abstract void applyToWorld(World world);
 }

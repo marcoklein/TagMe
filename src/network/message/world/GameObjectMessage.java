@@ -18,9 +18,20 @@ public abstract class GameObjectMessage extends WorldMessage {
     public GameObjectMessage() {
     }
 
+    public GameObjectMessage(boolean reliable) {
+        super(reliable);
+    }
+
     public GameObjectMessage(int id) {
         this.id = id;
     }
+
+    public GameObjectMessage(int id, boolean reliable) {
+        super(reliable);
+        this.id = id;
+    }
+    
+
     
     @Override
     public void applyToWorld(World world) {

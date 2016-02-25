@@ -4,6 +4,7 @@
  */
 package network.message.world;
 
+import com.jme3.network.serializing.Serializable;
 import com.jme3.scene.Spatial;
 import world.World;
 
@@ -12,6 +13,7 @@ import world.World;
  *
  * @author Marco Klein
  */
+@Serializable
 public class RemoveGameObjectMessage extends GameObjectMessage {
 
     public RemoveGameObjectMessage() {

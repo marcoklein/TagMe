@@ -147,15 +147,16 @@ public class World {
 //            return -1;
         }
         
+        // set id of entity
+        gameObject.setUserData("Id", id);
+        gameObjects.put(id, gameObject);
+        
+        worldNode.attachChild(gameObject);
+        
         for (WorldListener listener : listeners) {
             listener.gameObjectAdded(gameObject);
         }
         
-        // set id of entity
-        gameObject.setUserData("Id", id);
-        gameObjects.put(id, gameObject);
-
-        worldNode.attachChild(gameObject);
         LOG.info("GameObject added to world.");
         return id;
     }
@@ -179,15 +180,16 @@ public class World {
      * @param entity 
      */
     public void removeGameObject(Spatial entity) {
+        for (WorldListener listener : listeners) {
+            listener.gameObjectRemoved(entity);
+        }
+        
         players.remove(entity);
         worldObjects.remove(entity);
         entity.removeFromParent();
         gameObjects.remove((int) entity.getUserData("Id"));
-        bulletAppState.getPhysicsSpace().remove(entity);
+        bulletAppState.getPhysicsSpace().removeAll(entity);
         
-        for (WorldListener listener : listeners) {
-            listener.gameObjectRemoved(entity);
-        }
     }
     
     public Spatial getGameObject(int id) {

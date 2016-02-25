@@ -68,11 +68,18 @@ public class ClientMain extends SimpleApplication {
     @Override
     public void simpleRender(RenderManager rm) {
     }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+    }
+    
     
     
     
     public static void main(String[] args) {
         ClientMain app = new ClientMain();
+        app.setPauseOnLostFocus(false);
         app.start();
     }
 }

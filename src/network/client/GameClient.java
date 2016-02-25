@@ -1,16 +1,13 @@
 package network.client;
 
 import com.jme3.app.state.AppStateManager;
-import com.jme3.bullet.control.BetterCharacterControl;
-import com.jme3.input.ChaseCamera;
-import com.jme3.math.Vector3f;
 import com.jme3.network.Client;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 import com.jme3.network.Network;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import java.io.IOException;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import network.NetworkAppState;
@@ -20,8 +17,6 @@ import network.message.NewPlayerMessage;
 import network.message.SetPlayerMessage;
 import network.message.world.WorldMessage;
 import world.World;
-import world.control.PlayerControl;
-import world.factory.ModelFactory;
 
 /**
  * Added to the client to enable network stuff.
@@ -58,7 +53,7 @@ public class GameClient extends NetworkAppState implements MessageListener<Clien
         try {
             LOG.log(Level.INFO, "Connecting to server {0} on port {1}.", new Object[]{host, port});
             
-            client = Network.connectToServer(GameServer.NAME, GameServer.VERSION, "localhost", GameServer.PORT, GameServer.PORT);
+            client = Network.connectToServer(GameServer.NAME, GameServer.VERSION, "localhost", GameServer.TCP_PORT, GameServer.UDP_PORT);
             
         } catch (IOException ex) {
             Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
@@ -74,43 +69,48 @@ public class GameClient extends NetworkAppState implements MessageListener<Clien
 
     @Override
     public void stateDetached(AppStateManager stateManager) {
+        LOG.info("Closing client.");
         // cleanup
         client.removeMessageListener(this);
         client.close();
     }
 
     @Override
-    public void messageReceived(Client source, Message m) {
-        LOG.log(Level.INFO, "Message recieved: {0}", m);
+    public void cleanup() {
+        super.cleanup();
+        client.close();
+    }
+    
+
+    @Override
+    public void messageReceived(final Client source, final Message m) {
+//        LOG.log(Level.INFO, "Message recieved: {0}", m);
         // handle incoming messages
         if (m instanceof WorldMessage) {
-            ((WorldMessage) m).applyToWorld(world);
+            world.getApp().enqueue(new Callable<Void>() {
+
+                @Override
+                public Void call() throws Exception {
+                    ((WorldMessage) m).applyToWorld(world);
+                    return null;
+                }
+                
+            });
         } else if (m instanceof SetPlayerMessage) {
-            SetPlayerMessage message = (SetPlayerMessage) m;
-            playerId = message.getId();
+            final SetPlayerMessage message = (SetPlayerMessage) m;
+            world.getApp().enqueue(new Callable<Void>() {
+
+                @Override
+                public Void call() throws Exception {
+                    playerId = message.getId();
+                    Spatial player = world.getGameObject(playerId);
+                    player.addControl(new SyncPlayerControl(client));
+                    return null;
+                }
+                
+            });
             
-            // add player controls
-            Node player = (Node) world.getGameObject(message.getId());
-            // move player to start location
-            player.setLocalTranslation(message.getStartLocation());
-            // add physics to player
-            BetterCharacterControl characterControl = new BetterCharacterControl(1f, 2f, 1f);
-            characterControl.setJumpForce(new Vector3f(0, 11f, 0));
-            player.addControl(characterControl);
-            player.addControl(new PlayerControl(world, 8));
-
-            // set up geometry
-            Geometry geometry = ModelFactory.createSphere(world.getApp().getAssetManager(), 1, message.getColor());
-            // move geometry in center of player
-            geometry.setLocalTranslation(0, 1f, 0);
-            geometry.setName("PlayerGeometry");
-            player.attachChild(geometry);
-
-            // attach a camera
-            ChaseCamera cam = new ChaseCamera(world.getApp().getCamera(), geometry, world.getApp().getInputManager());
-            cam.setDragToRotate(false);
-            cam.setInvertVerticalAxis(true);
-
+            
             
         } else if (m instanceof NewPlayerMessage) {
             NewPlayerMessage msg = (NewPlayerMessage) m;
