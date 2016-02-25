@@ -39,9 +39,17 @@ public class InitWorldMessage extends WorldMessage {
         world.reset();
         // world size
         world.setWorldSize(worldSize);
+        
         // add initial game objects
         for (AddGameObjectMessage msg : gameObjectMsgs) {
-            msg.applyToWorld(world);
+            Node gameObject = new Node("GameObject");
+            world.addGameObject(gameObject, msg.id);
+        }
+        // apply models and logics
+        for (AddGameObjectMessage msg : gameObjectMsgs) {
+            GameObjectControl gameObjectControl = world.getGameObjectControl(msg.id);
+            gameObjectControl.setModel(msg.model);
+            gameObjectControl.setLogic(msg.logic);
         }
     }
 
