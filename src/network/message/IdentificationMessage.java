@@ -1,5 +1,6 @@
-package network.messages;
+package network.message;
 
+import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
 
 /**
@@ -8,7 +9,7 @@ import com.jme3.network.serializing.Serializable;
  * @author Marco Klein
  */
 @Serializable
-public class IdentificationMessage {
+public class IdentificationMessage extends AbstractMessage {
     
     private String playerName;
 

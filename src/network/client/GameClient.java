@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import network.NetworkAppState;
+import network.message.IdentificationMessage;
+import network.message.world.WorldMessage;
 import world.World;
 
 /**
@@ -40,13 +42,17 @@ public class GameClient extends NetworkAppState implements MessageListener<Clien
     public void stateAttached(AppStateManager stateManager) {
         // initialize
         try {
-            client = Network.connectToServer(host, port);
+            client = Network.connectToServer("TagMe", 1, host, port);
         } catch (IOException ex) {
             Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
         }
         // add listeners
         client.addMessageListener(this);
         client.start();
+        
+        // send init message
+        // TODO let user pick player name
+        client.send(new IdentificationMessage("TestPlayerName"));
     }
 
     @Override
@@ -58,6 +64,10 @@ public class GameClient extends NetworkAppState implements MessageListener<Clien
 
     @Override
     public void messageReceived(Client source, Message m) {
+        // handle incoming messages
+        if (m instanceof WorldMessage) {
+            ((WorldMessage) m).applyToWorld(world);
+        }
     }
     
     

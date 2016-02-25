@@ -8,6 +8,7 @@ import com.jme3.scene.Node;
 import world.controls.PlayerControl;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import world.controls.GameObjectControl;
@@ -44,6 +45,12 @@ public class World {
      */
     private ArrayList<Spatial> worldObjects;
     
+    /**
+     * All GameObjects mapped to their id.
+     * Get a game object id by calling gameObject.getUserData("Id")
+     */
+    private HashMap<Integer, Spatial> gameObjects;
+    
     private ArrayList<WorldListener> listeners;
     
     /**
@@ -65,6 +72,8 @@ public class World {
         players = new ArrayList<>();
         worldObjects = new ArrayList<>();
         listeners = new ArrayList<>();
+        gameObjects = new HashMap<>();
+        bulletAppState.getPhysicsSpace().destroy();
     }
     
     public void reset() {
@@ -75,45 +84,50 @@ public class World {
      * Adds the given game object (in form of a Spatial) to the world.
      * The game object type is determined by the spatial classes.
      * 
-     * @param entity 
+     * @param gameObject 
      */
-    public void addGameObject(Spatial entity) {
-        GameObjectControl gameObjectEntity = entity.getControl(GameObjectControl.class);
+    public void addGameObject(Spatial gameObject) {
+        addGameObject(gameObject, generateGameObjectId());
+    }
+    
+    public void addGameObject(Spatial gameObject, int id) {
+        GameObjectControl gameObjectEntity = gameObject.getControl(GameObjectControl.class);
         if (gameObjectEntity != null) {
             // set world of game object
             gameObjectEntity.setWorld(this);
         }
-        if (entity.getControl(PlayerControl.class) != null) {
+        if (gameObject.getControl(PlayerControl.class) != null) {
             // add player with PlacerControl
-            bulletAppState.getPhysicsSpace().add(entity.getControl(BetterCharacterControl.class));
-            bulletAppState.getPhysicsSpace().addAll(entity);
-            players.add(entity);
-        } else if (entity.getControl(WorldObjectControl.class) != null) {
+            bulletAppState.getPhysicsSpace().add(gameObject.getControl(BetterCharacterControl.class));
+            bulletAppState.getPhysicsSpace().addAll(gameObject);
+            players.add(gameObject);
+        } else if (gameObject.getControl(WorldObjectControl.class) != null) {
             // add obstacle with ObstacleControl
-            RigidBodyControl bodyControl = entity.getControl(RigidBodyControl.class);
+            RigidBodyControl bodyControl = gameObject.getControl(RigidBodyControl.class);
             if (bodyControl != null) {
                 bulletAppState.getPhysicsSpace().add(bodyControl);
-                bulletAppState.getPhysicsSpace().addAll(entity);
+                bulletAppState.getPhysicsSpace().addAll(gameObject);
             } else {
                 LOG.warning("Obstacle Game Object with no RigidBodyControl added.");
             }
-            worldObjects.add(entity);
-        } else if (entity.getControl(RigidBodyControl.class) != null) {
-            bulletAppState.getPhysicsSpace().addAll(entity);
+            worldObjects.add(gameObject);
+        } else if (gameObject.getControl(RigidBodyControl.class) != null) {
+            bulletAppState.getPhysicsSpace().addAll(gameObject);
         } else {
             // invalid Game Object
-            LOG.log(Level.WARNING, "Could not add Game Object {0} because no appropriate control could be found - entity is no Game Object.", entity);
+            LOG.log(Level.WARNING, "Could not add Game Object {0} because no appropriate control could be found - entity is no Game Object.", gameObject);
             return;
         }
         
         for (WorldListener listener : listeners) {
-            listener.gameObjectAdded(entity);
+            listener.gameObjectAdded(gameObject);
         }
         
         // set id of entity
-        entity.setUserData("Id", generateGameObjectId());
+        gameObject.setUserData("Id", id);
+        gameObjects.put(id, gameObject);
 
-        worldNode.attachChild(entity);
+        worldNode.attachChild(gameObject);
     }
     
     private int generateGameObjectId() {
@@ -129,6 +143,7 @@ public class World {
         players.remove(entity);
         worldObjects.remove(entity);
         entity.removeFromParent();
+        gameObjects.remove((int) entity.getUserData("Id"));
         bulletAppState.getPhysicsSpace().remove(entity);
         
         for (WorldListener listener : listeners) {
