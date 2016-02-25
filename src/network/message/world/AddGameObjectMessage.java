@@ -2,10 +2,8 @@ package network.message.world;
 
 import com.jme3.network.serializing.Serializable;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 import world.World;
-import world.control.LogicControl;
-import world.control.ModelControl;
+import world.GameObjectControl;
 import world.gameobject.logic.Logic;
 import world.gameobject.model.Model;
 
@@ -23,16 +21,8 @@ public class AddGameObjectMessage extends GameObjectMessage {
     public AddGameObjectMessage() {
     }
 
-    public AddGameObjectMessage(Spatial spatial) {
-        id = (int) spatial.getUserData("Id");
-        ModelControl modelControl = spatial.getControl(ModelControl.class);
-        if (modelControl != null) {
-            model = modelControl.getModel();
-        }
-        LogicControl logicControl = spatial.getControl(LogicControl.class);
-        if (logicControl != null) {
-            logic = logicControl.getLogic();
-        }
+    public AddGameObjectMessage(Node gameObject) {
+        id = (int) gameObject.getUserData("Id");
     }
 
     public AddGameObjectMessage(Logic logic, Model model, int id) {
@@ -42,12 +32,11 @@ public class AddGameObjectMessage extends GameObjectMessage {
     }
 
     @Override
-    public void applyToGameObject(World world, Spatial gameObject) {
+    public void applyToGameObject(World world, Node gameObject, GameObjectControl gameObjectControl) {
         gameObject = new Node("GameObject");
-        gameObject.addControl(new ModelControl(world, model));
-        gameObject.addControl(new LogicControl(world, logic));
+        gameObjectControl = new GameObjectControl(world, model, logic);
+        gameObject.addControl(gameObjectControl);
         world.addGameObject(gameObject, id);
-
     }
     
 }

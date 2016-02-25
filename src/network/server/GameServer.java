@@ -153,7 +153,7 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
                     
                     // prepare the init world message
                     InitWorldMessage message = new InitWorldMessage(world.getWorldSize(), world.getGameObjects());
-                    LOG.info("Sending " + world.getGameObjects().length + " game objects.");
+                    LOG.log(Level.INFO, "Sending {0} game objects.", world.getGameObjects().length);
                     source.send(message);
                     
                     

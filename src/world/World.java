@@ -110,8 +110,17 @@ public class World {
             gameObjectEntity.setWorld(this);
         }
         
+        // get the GameObjectControl or create it if it does not exist
+        GameObjectControl gameObjectControl = gameObject.getControl(GameObjectControl.class);
+        if (gameObjectControl == null) {
+            LOG.info("GameObject with no GameObjectControl added.");
+            gameObjectControl = new GameObjectControl(this);
+            gameObject.addControl(gameObjectControl);
+        }
+        
         // set id of entity
         gameObject.setUserData("Id", id);
+        gameObjectControl.setId(id);
         gameObjects.put(id, gameObject);
         
         worldNode.attachChild(gameObject);
@@ -155,6 +164,10 @@ public class World {
     
     public Node getGameObject(int id) {
         return gameObjects.get(id);
+    }
+    
+    public GameObjectControl getGameObjectControl(int id) {
+        return gameObjects.get(id).getControl(GameObjectControl.class);
     }
     
     public Node[] getGameObjects() {

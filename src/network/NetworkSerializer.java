@@ -10,6 +10,7 @@ import network.message.world.RemoveGameObjectMessage;
 import network.message.world.UpdateGameObjectPositionMessage;
 import network.message.world.UpdateLogicMessage;
 import network.message.world.UpdateModelMessage;
+import world.gameobject.logic.AttachLogic;
 import world.gameobject.logic.ObstacleLogic;
 import world.gameobject.logic.PlayerLogic;
 import world.gameobject.logic.StaticPhysicsLogic;
@@ -48,6 +49,7 @@ public class NetworkSerializer {
         Serializer.registerClass(PlayerLogic.class);
         Serializer.registerClass(StaticPhysicsLogic.class);
         Serializer.registerClass(ObstacleLogic.class);
+        Serializer.registerClass(AttachLogic.class);
         
         
     }

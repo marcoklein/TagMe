@@ -4,8 +4,9 @@
  */
 package network.message.world;
 
-import com.jme3.scene.Spatial;
+import com.jme3.scene.Node;
 import world.World;
+import world.GameObjectControl;
 
 /**
  *
@@ -35,10 +36,11 @@ public abstract class GameObjectMessage extends WorldMessage {
     
     @Override
     public void applyToWorld(World world) {
-        applyToGameObject(world, world.getGameObject(id));
+        Node gameObject = world.getGameObject(id);
+        applyToGameObject(world, gameObject, gameObject.getControl(GameObjectControl.class));
     }
     
-    public abstract void applyToGameObject(World world, Spatial gameObject);
+    public abstract void applyToGameObject(World world, Node gameObject, GameObjectControl gameObjectControl);
     
     
 }

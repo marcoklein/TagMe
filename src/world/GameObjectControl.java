@@ -1,12 +1,10 @@
-package world.gameobject;
+package world;
 
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
-import java.util.ArrayList;
-import world.World;
 import world.gameobject.logic.Logic;
 import world.gameobject.model.Model;
 
@@ -26,35 +24,19 @@ public class GameObjectControl extends AbstractControl {
     protected Model model;
     protected Logic logic;
     
-    /**
-     * List of game objects which are attached to this game object.
-     */
-    protected ArrayList<Node> attachedGameObjects;
-
-    public GameObjectControl() {
-    }
-
-    public GameObjectControl(Model model) {
-        this.model = model;
-    }
+    private int id;
     
-    public GameObjectControl(Model model, Logic logic) {
+
+    public GameObjectControl(World world) {
+        this.world = world;
+    }
+
+    public GameObjectControl(World world, Model model, Logic logic) {
+        this.world = world;
         this.model = model;
         this.logic = logic;
     }
-    
-    public void attachGameObject(Node gameObject) {
-        attachedGameObjects.add(gameObject);
-    }
-    
-    public void detachGameObject(int id) {
-        detachGameObject(world.getGameObject(id));
-    }
-    
-    public void detachGameObject(Node gameObject) {
-        
-    }
-    
+
     @Override
     protected void controlUpdate(float tpf) {
     }
@@ -103,6 +85,28 @@ public class GameObjectControl extends AbstractControl {
         if (gameObject != null && logic != null) {
             logic.addLogic(world, gameObject);
         }
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public Node getGameObject() {
+        return gameObject;
+    }
+
+    public int getId() {
+        return id;
+    }
+    
+    /**
+     * Called by world as the GameObjects gets added to a world.
+     * 
+     * @param id
+     * @return 
+     */
+    void setId(int id) {
+        this.id = id;
     }
     
 }
