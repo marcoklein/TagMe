@@ -5,12 +5,12 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.network.ConnectionListener;
+import com.jme3.network.Filters;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 import com.jme3.network.Network;
 import com.jme3.network.Server;
-import com.jme3.scene.Spatial;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -19,9 +19,12 @@ import java.util.logging.Logger;
 import network.NetworkAppState;
 import network.NetworkSerializer;
 import network.message.IdentificationMessage;
+import network.message.NewPlayerMessage;
+import network.message.SetPlayerMessage;
+import network.message.world.InitWorldMessage;
+import network.message.world.UpdateGameObjectPosition;
 import network.message.world.WorldMessage;
 import world.World;
-import world.factory.GameObjectFactory;
 
 /**
  * Holds clients which will be handled.
@@ -72,8 +75,12 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
 
     @Override
     public void messageReceived(final HostedConnection source, final Message m) {
-        if (m instanceof IdentificationMessage) {
-            IdentificationMessage identification = (IdentificationMessage) m;
+        if (m instanceof UpdateGameObjectPosition) {
+            // broadcast location updates
+            // TODO test if client is allowed to update object
+            server.broadcast(Filters.notEqualTo(source), m);
+        } if (m instanceof IdentificationMessage) {
+            final IdentificationMessage identification = (IdentificationMessage) m;
             // TODO check identification
             LOG.log(Level.INFO, "{0} has connected.", identification.getPlayerName());
             source.setAttribute("PlayerName", identification.getPlayerName());
@@ -85,10 +92,19 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
                 @Override
                 public Void call() throws Exception {
                     // add a player model to the client
-                    GameObjectFactory factory = new GameObjectFactory(world);
-                    Spatial player = factory.createPlayer(new Vector3f(10, 50, 10), ColorRGBA.Blue);
-                    int id = world.addGameObject(player);
+                    // prepare the init world message
+                    InitWorldMessage message = new InitWorldMessage(world.getWorldSize(), world.getGameObjects());
+                    source.send(message);
+                    int id = world.generateGameObjectId();
                     source.setAttribute("PlayerId", id);
+                    
+                    // let user know who his player is
+                    SetPlayerMessage playerMsg = new SetPlayerMessage(id, ColorRGBA.White, new Vector3f(0, 50, 0));
+                    source.send(playerMsg);
+                    
+                    // inform other players about player
+                    server.broadcast(Filters.notEqualTo(source), new NewPlayerMessage(identification.getPlayerName(), id));
+                    LOG.info("Player joined game.");
                     return null;
                 }
                 

@@ -54,9 +54,9 @@ public class AddObstacleMessage extends GameObjectMessage {
         // add obstacle geometry
         Node obstacle = new Node();
         obstacle.attachChild(builder.buildGeometry(world));
-        if (location != null) {
+        if (location != null || !slideIn) {
             // set current location if one is given
-            obstacle.setLocalTranslation(targetLocation);
+            obstacle.setLocalTranslation(location);
         }
         obstacle.addControl(new RigidBodyControl(0));
         world.addGameObject(obstacle, id);

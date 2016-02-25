@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package world.controls;
+package world.control;
 
 import com.jme3.app.Application;
 import com.jme3.bullet.control.BetterCharacterControl;
@@ -25,7 +25,7 @@ import world.World;
  *
  * @author Marco Klein
  */
-public class PlayerControl extends GameObjectControl implements ActionListener {
+public class PlayerControl extends WorldControl implements ActionListener {
     
     private BetterCharacterControl characterControl;
     private boolean left = false, right = false, up = false, down = false;
@@ -123,7 +123,7 @@ public class PlayerControl extends GameObjectControl implements ActionListener {
         // animate player movement by rotating the player (since its geometry is a sphere)
         // TODO animate the player somewhere else (maybe an extra PlayerAnimationControl) only for better code design
         // get player geometry (could be implemented nicer - see todo on top)
-        Geometry playerGeom = (Geometry) ((Node) spatial).getChild("PlayerGeometry");
+        Spatial playerGeom = ((Node) spatial).getChild("Model");
         playerGeom.rotate(tpf * tempVector.x, 0, tpf * tempVector.z);
         
         // reset jump if on ground or not moved (f.i. sticked to wall)

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package world.controls;
+package world.control;
 
 import com.jme3.scene.control.AbstractControl;
 

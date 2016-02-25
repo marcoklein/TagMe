@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 import world.World;
 import world.WorldListener;
-import world.controls.ObstacleControl;
-import world.controls.PlayerControl;
+import world.control.ObstacleControl;
+import world.control.PlayerControl;
 
 /**
  * Simulates all Game Objects of the world.

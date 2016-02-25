@@ -6,14 +6,15 @@ import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import world.controls.PlayerControl;
+import world.control.PlayerControl;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import world.controls.GameObjectControl;
-import world.controls.WorldObjectControl;
+import world.control.WorldControl;
+import world.control.WorldObjectControl;
 
 /**
  * Holds all GameObjects.
@@ -89,17 +90,36 @@ public class World {
     }
     
     /**
+     * Adds all given Game Objects and returns their associated ids in the same
+     * order.
+     * 
+     * @param gameObjects
+     * @return 
+     */
+    public int[] addGameObjects(Spatial[] gameObjects) {
+        int ids[] = new int[gameObjects.length];
+        for (int i = 0; i < gameObjects.length; i++) {
+            ids[i] = addGameObject(gameObjects[i]);
+        }
+        return ids;
+    }
+    
+    /**
      * Adds the given game object (in form of a Spatial) to the world.
      * The game object type is determined by the spatial classes.
      * 
      * @param gameObject 
      */
     public int addGameObject(Spatial gameObject) {
+        Integer id;
+        if ((id = gameObject.getUserData("Id")) != null) {
+            return addGameObject(gameObject, id);
+        }
         return addGameObject(gameObject, generateGameObjectId());
     }
     
     public int addGameObject(Spatial gameObject, int id) {
-        GameObjectControl gameObjectEntity = gameObject.getControl(GameObjectControl.class);
+        WorldControl gameObjectEntity = gameObject.getControl(WorldControl.class);
         if (gameObjectEntity != null) {
             // set world of game object
             gameObjectEntity.setWorld(this);
@@ -139,7 +159,7 @@ public class World {
         return id;
     }
     
-    private int generateGameObjectId() {
+    public int generateGameObjectId() {
         return gameObjectId++;
     }
     
@@ -171,6 +191,13 @@ public class World {
     
     public Spatial getGameObject(int id) {
         return gameObjects.get(id);
+    }
+    
+    public Spatial[] getGameObjects() {
+        Collection<Spatial> collection = gameObjects.values();
+        Spatial[] spatials = collection.toArray(new Spatial[collection.size()]);
+        return spatials;
+        
     }
     
     public void addListener(WorldListener listener) {

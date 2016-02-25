@@ -14,9 +14,8 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import world.World;
-import world.controls.DestroyableControl;
-import world.controls.ObstacleControl;
-import world.controls.PlayerControl;
+import world.control.ObstacleControl;
+import world.control.PlayerControl;
 
 /**
  * Creates GameObjects like Players or Obstacles.

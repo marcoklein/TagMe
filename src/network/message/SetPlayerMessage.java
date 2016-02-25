@@ -18,6 +18,9 @@ public class SetPlayerMessage extends AbstractMessage {
     private ColorRGBA color;
     private Vector3f startLocation;
 
+    public SetPlayerMessage() {
+    }
+
     public SetPlayerMessage(int id, ColorRGBA color, Vector3f startLocation) {
         this.id = id;
         this.color = color;

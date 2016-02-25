@@ -2,6 +2,8 @@ package network;
 
 import com.jme3.network.serializing.Serializer;
 import network.message.IdentificationMessage;
+import network.message.NewPlayerMessage;
+import network.message.SetPlayerMessage;
 import network.message.world.InitWorldMessage;
 
 /**
@@ -14,6 +16,8 @@ public class NetworkSerializer {
         Serializer.registerClass(IdentificationMessage.class);
         
         Serializer.registerClass(InitWorldMessage.class);
+        Serializer.registerClass(SetPlayerMessage.class);
+        Serializer.registerClass(NewPlayerMessage.class);
     }
     
 }

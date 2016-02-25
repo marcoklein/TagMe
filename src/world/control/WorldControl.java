@@ -1,4 +1,4 @@
-package world.controls;
+package world.control;
 
 import com.jme3.scene.control.AbstractControl;
 import world.World;
@@ -7,15 +7,15 @@ import world.World;
  *
  * @author Marco Klein
  */
-public abstract class GameObjectControl extends AbstractControl {
+public abstract class WorldControl extends AbstractControl {
     
     
     protected World world;
 
-    public GameObjectControl() {
+    public WorldControl() {
     }
     
-    public GameObjectControl(World world) {
+    public WorldControl(World world) {
         this.world = world;
     }
 
