@@ -12,25 +12,24 @@ import world.factory.GameObjectFactory;
  * @author Marco Klein
  */
 @Serializable
-public class AddPlayer extends WorldMessage {
+public class AddPlayerMessage extends GameObjectMessage {
     
-    private int id;
     private String playerName;
     private Vector3f startLocation;
     private ColorRGBA color;
 
-    public AddPlayer() {
+    public AddPlayerMessage() {
     }
 
-    public AddPlayer(int id, String playerName, Vector3f startLocation, ColorRGBA color) {
+    public AddPlayerMessage(int id, String playerName, Vector3f startLocation, ColorRGBA color) {
         this.id = id;
         this.playerName = playerName;
         this.startLocation = startLocation;
         this.color = color;
     }
-
+    
     @Override
-    public void applyToWorld(World world) {
+    public void applyToGameObject(World world, Spatial gameObject) {
         Spatial player = new GameObjectFactory(world).createPlayer(startLocation, color);
         player.setUserData("PlayerName", playerName);
         world.addGameObject(player);

@@ -94,11 +94,11 @@ public class World {
      * 
      * @param gameObject 
      */
-    public void addGameObject(Spatial gameObject) {
-        addGameObject(gameObject, generateGameObjectId());
+    public int addGameObject(Spatial gameObject) {
+        return addGameObject(gameObject, generateGameObjectId());
     }
     
-    public void addGameObject(Spatial gameObject, int id) {
+    public int addGameObject(Spatial gameObject, int id) {
         GameObjectControl gameObjectEntity = gameObject.getControl(GameObjectControl.class);
         if (gameObjectEntity != null) {
             // set world of game object
@@ -124,7 +124,7 @@ public class World {
         } else {
             // invalid Game Object
             LOG.log(Level.WARNING, "Could not add Game Object {0} because no appropriate control could be found - entity is no Game Object.", gameObject);
-            return;
+            return -1;
         }
         
         for (WorldListener listener : listeners) {
@@ -136,6 +136,7 @@ public class World {
         gameObjects.put(id, gameObject);
 
         worldNode.attachChild(gameObject);
+        return id;
     }
     
     private int generateGameObjectId() {
@@ -166,6 +167,10 @@ public class World {
         for (WorldListener listener : listeners) {
             listener.gameObjectRemoved(entity);
         }
+    }
+    
+    public Spatial getGameObject(int id) {
+        return gameObjects.get(id);
     }
     
     public void addListener(WorldListener listener) {
