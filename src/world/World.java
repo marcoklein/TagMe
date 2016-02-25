@@ -142,9 +142,9 @@ public class World {
         } else if (gameObject.getControl(RigidBodyControl.class) != null) {
             bulletAppState.getPhysicsSpace().addAll(gameObject);
         } else {
-            // invalid Game Object
-            LOG.log(Level.WARNING, "Could not add Game Object {0} because no appropriate control could be found - entity is no Game Object.", gameObject);
-            return -1;
+            // invalid Game Object#
+//            LOG.log(Level.WARNING, "Could not add Game Object {0} because no appropriate control could be found - entity is no Game Object.", gameObject);
+//            return -1;
         }
         
         for (WorldListener listener : listeners) {
@@ -156,6 +156,7 @@ public class World {
         gameObjects.put(id, gameObject);
 
         worldNode.attachChild(gameObject);
+        LOG.info("GameObject added to world.");
         return id;
     }
     

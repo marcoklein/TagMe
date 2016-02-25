@@ -5,7 +5,6 @@
 package world.gameobject.logic;
 
 import com.jme3.scene.Node;
-import java.io.Serializable;
 import world.World;
 
 /**
@@ -13,7 +12,7 @@ import world.World;
  *
  * @author Marco Klein
  */
-public abstract class Logic implements Serializable {
+public abstract class Logic {
     
     public abstract void applyLogic(World world, Node gameObject);
 }

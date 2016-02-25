@@ -44,14 +44,14 @@ public class GameObjectControl extends AbstractControl {
     @Override
     public void setSpatial(Spatial spatial) {
         super.setSpatial(spatial);
-        if (spatial != null) {
-            if (model != null) {
-                spatial.addControl(new ModelControl(model));
-            }
-            if (logic != null) {
-                spatial.addControl(new LogicControl(logic));
-            }
-        }
+//        if (spatial != null) {
+//            if (model != null) {
+//                spatial.addControl(new ModelControl(world, model));
+//            }
+//            if (logic != null) {
+//                spatial.addControl(new LogicControl(world, logic));
+//            }
+//        }
     }
     
     

@@ -7,8 +7,11 @@ package world.gameobject.logic;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.input.ChaseCamera;
 import com.jme3.math.Vector3f;
+import com.jme3.network.serializing.Serializable;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import world.World;
 import world.control.PlayerControl;
 
@@ -16,7 +19,9 @@ import world.control.PlayerControl;
  *
  * @author Marco Klein
  */
+@Serializable
 public class PlayerLogic extends Logic {
+    private static final Logger LOG = Logger.getLogger(PlayerLogic.class.getName());
     
     private Vector3f startLocation;
 
@@ -30,10 +35,12 @@ public class PlayerLogic extends Logic {
     @Override
     public void applyLogic(World world, Node player) {
         Spatial model = player.getChild("Model");
+        LOG.info("Applying Player logic.");
         
         // move player to start location
         if (startLocation != null) {
             player.setLocalTranslation(startLocation);
+            LOG.log(Level.INFO, "Player starting at {0}", startLocation);
         }
         
         // add controls
@@ -41,6 +48,7 @@ public class PlayerLogic extends Logic {
         characterControl.setJumpForce(new Vector3f(0, 11f, 0));
         player.addControl(characterControl);
         player.addControl(new PlayerControl(world, 8));
+        
         // attach camera
         ChaseCamera cam = new ChaseCamera(world.getApp().getCamera(), model, world.getApp().getInputManager());
         cam.setDragToRotate(false);

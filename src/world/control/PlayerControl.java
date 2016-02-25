@@ -17,6 +17,7 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import java.util.logging.Logger;
 import world.World;
 
 /**
@@ -26,6 +27,7 @@ import world.World;
  * @author Marco Klein
  */
 public class PlayerControl extends WorldControl implements ActionListener {
+    private static final Logger LOG = Logger.getLogger(PlayerControl.class.getName());
     
     private BetterCharacterControl characterControl;
     private boolean left = false, right = false, up = false, down = false;
@@ -79,7 +81,7 @@ public class PlayerControl extends WorldControl implements ActionListener {
             // set up camera
             cam = app.getCamera();
 
-            
+            LOG.info("PlayerControl initialized.");
         }
     }
     

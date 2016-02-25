@@ -18,7 +18,6 @@ import network.NetworkSerializer;
 import network.message.IdentificationMessage;
 import network.message.NewPlayerMessage;
 import network.message.SetPlayerMessage;
-import network.message.world.InitWorldMessage;
 import network.message.world.WorldMessage;
 import world.World;
 import world.control.PlayerControl;
@@ -82,10 +81,11 @@ public class GameClient extends NetworkAppState implements MessageListener<Clien
 
     @Override
     public void messageReceived(Client source, Message m) {
+        LOG.log(Level.INFO, "Message recieved: {0}", m);
         // handle incoming messages
         if (m instanceof WorldMessage) {
             ((WorldMessage) m).applyToWorld(world);
-        } if (m instanceof SetPlayerMessage) {
+        } else if (m instanceof SetPlayerMessage) {
             SetPlayerMessage message = (SetPlayerMessage) m;
             playerId = message.getId();
             
@@ -116,7 +116,7 @@ public class GameClient extends NetworkAppState implements MessageListener<Clien
             NewPlayerMessage msg = (NewPlayerMessage) m;
             LOG.log(Level.INFO, "Player {0} with id {1} has connected.", new Object[]{msg.getPlayerName(), msg.getPlayerId()});
         } else {
-            LOG.info("Recieved invalid message.");
+            LOG.log(Level.INFO, "Recieved invalid message: {0}", m.getClass());
         }
     }
     

@@ -11,6 +11,7 @@ import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 import com.jme3.network.Network;
 import com.jme3.network.Server;
+import com.jme3.scene.Node;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -20,11 +21,16 @@ import network.NetworkAppState;
 import network.NetworkSerializer;
 import network.message.IdentificationMessage;
 import network.message.NewPlayerMessage;
-import network.message.SetPlayerMessage;
 import network.message.world.InitWorldMessage;
 import network.message.world.UpdateGameObjectPosition;
+import network.message.world.UpdateLogicMessage;
+import network.message.world.UpdateModelMessage;
 import network.message.world.WorldMessage;
 import world.World;
+import world.control.LogicControl;
+import world.control.ModelControl;
+import world.gameobject.logic.PlayerLogic;
+import world.gameobject.model.PlayerModel;
 
 /**
  * Holds clients which will be handled.
@@ -92,14 +98,19 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
                 @Override
                 public Void call() throws Exception {
                     // add a player model to the client
+                    Node playerNode = new Node();
+                    playerNode.addControl(new ModelControl(world, new PlayerModel(ColorRGBA.White)));
+                    int id = world.addGameObject(playerNode);
+                    
                     // prepare the init world message
                     InitWorldMessage message = new InitWorldMessage(world.getWorldSize(), world.getGameObjects());
                     source.send(message);
-                    int id = world.generateGameObjectId();
+                    //int id = world.generateGameObjectId();
                     source.setAttribute("PlayerId", id);
                     
                     // let user know who his player is
-                    SetPlayerMessage playerMsg = new SetPlayerMessage(id, ColorRGBA.White, new Vector3f(0, 50, 0));
+//                    source.send(new UpdateModelMessage(new PlayerModel(ColorRGBA.White), id));
+                    UpdateLogicMessage playerMsg = new UpdateLogicMessage(new PlayerLogic(new Vector3f(0, 50, 0)), id);
                     source.send(playerMsg);
                     
                     // inform other players about player
