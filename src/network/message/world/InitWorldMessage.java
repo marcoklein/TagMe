@@ -10,7 +10,7 @@ import world.World;
  */
 @Serializable
 public class InitWorldMessage extends WorldMessage {
-
+    
     @Override
     public void applyToWorld(World world) {
         world.reset();

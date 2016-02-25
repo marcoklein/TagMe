@@ -55,7 +55,7 @@ public class Simulator extends AbstractAppState implements WorldListener {
     }
     
     private void initialize() {
-        world.addListener(this);
+        //world.addListener(this);
         players = new ArrayList<>();
         obstacles = new ArrayList<>();
     }

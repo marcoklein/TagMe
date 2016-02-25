@@ -4,6 +4,7 @@ import com.jme3.app.Application;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import world.controls.PlayerControl;
 import com.jme3.scene.Spatial;
@@ -58,6 +59,8 @@ public class World {
      */
     private Node worldNode;
     
+    private Vector3f worldSize;
+    
     private int gameObjectId;
 
     public World(Application app, BulletAppState bulletAppState, Node worldNode) {
@@ -74,6 +77,7 @@ public class World {
         listeners = new ArrayList<>();
         gameObjects = new HashMap<>();
         bulletAppState.getPhysicsSpace().destroy();
+        worldSize = new Vector3f();
     }
     
     public void reset() {
@@ -182,6 +186,14 @@ public class World {
 
     public Node getWorldNode() {
         return worldNode;
+    }
+
+    public Vector3f getWorldSize() {
+        return worldSize;
+    }
+
+    public void setWorldSize(Vector3f worldSize) {
+        this.worldSize = worldSize;
     }
     
     

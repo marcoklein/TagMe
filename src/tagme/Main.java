@@ -14,6 +14,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.Random;
+import world.ObstacleBuilder;
 import world.factory.GameObjectFactory;
 import world.factory.ModelFactory;
 import world.World;
@@ -69,7 +70,7 @@ public class Main extends SimpleApplication {
         world = new World(this, bulletAppState, worldNode);
         world.addGameObject(ground);
         
-
+        
         /**
          * ****
          * TEST Game Objects - remove if not used
@@ -110,15 +111,15 @@ public class Main extends SimpleApplication {
     }
     
     private void initWorld(World world, Vector3f worldSize) {
-        GameObjectFactory factory = new GameObjectFactory(world);
+        
+        ObstacleBuilder builder = new ObstacleBuilder()
+                .sizeRange(new Vector3f(1, 1, 1), new Vector3f(2, 2, 2))
+                .setSlideIn(true)
+                .setColor(ColorRGBA.Red);
         
         for (int i = 0; i < 100; i++) {
-            // create a random obstacle size
-            Vector3f obstacleSize = new Vector3f();
-            obstacleSize.x = (float) (random.nextInt(1000) + 10) / 100f;
-            obstacleSize.y = (float) (random.nextInt(400) + 10) / 100f;
-            obstacleSize.z = (float) (random.nextInt(1000) + 10) / 100f;
-            spawnObstacle(world, factory, worldSize, obstacleSize);
+            Spatial obstacle = builder.buildObstacle(world);
+            world.addGameObject(obstacle);
         }
     }
     
