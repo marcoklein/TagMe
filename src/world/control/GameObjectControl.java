@@ -2,14 +2,14 @@ package world.control;
 
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
+import world.World;
 import world.gameobject.logic.Logic;
 import world.gameobject.model.Model;
 
 /**
- * DO NOT USE THIS CLASS
- * 
  * Control every GameObject which is added to a world must have.
  * A game object may have a graphical representation (a Model) and a logical representation
  * (a Logic).
@@ -18,8 +18,12 @@ import world.gameobject.model.Model;
  */
 public class GameObjectControl extends AbstractControl {
 
-    private Model model;
-    private Logic logic;
+    protected World world;
+    
+    protected Node gameObject;
+    
+    protected Model model;
+    protected Logic logic;
 
     public GameObjectControl() {
     }
@@ -43,17 +47,44 @@ public class GameObjectControl extends AbstractControl {
 
     @Override
     public void setSpatial(Spatial spatial) {
+        // every game object must be a node
+        if (spatial != null && !(spatial instanceof Node)) {
+            throw new RuntimeException("A GameObject must be a Node!");
+        }
+        this.gameObject = (Node) spatial;
+        
         super.setSpatial(spatial);
-//        if (spatial != null) {
-//            if (model != null) {
-//                spatial.addControl(new ModelControl(world, model));
-//            }
-//            if (logic != null) {
-//                spatial.addControl(new LogicControl(world, logic));
-//            }
-//        }
+        
+        // apply model and logic
+        setModel(model);
+        setLogic(logic);
     }
-    
-    
+
+    public Model getModel() {
+        return model;
+    }
+
+    public void setModel(Model model) {
+        this.model = model;
+        if (gameObject != null && model != null) {
+            gameObject.detachChildNamed("Model");
+            // attach model to model node
+            Node modelNode = new Node("Model");
+            modelNode.attachChild(model.createModel(world));
+            
+            gameObject.attachChild(modelNode);
+        }
+    }
+
+    public Logic getLogic() {
+        return logic;
+    }
+
+    public void setLogic(Logic logic) {
+        this.logic = logic;
+        if (gameObject != null && logic != null) {
+            logic.addLogic(world, gameObject);
+        }
+    }
     
 }

@@ -33,7 +33,7 @@ public class PlayerLogic extends Logic {
     }
     
     @Override
-    public void applyLogic(World world, Node player) {
+    public void addLogic(World world, Node player) {
         Spatial model = player.getChild("Model");
         LOG.info("Applying Player logic.");
         

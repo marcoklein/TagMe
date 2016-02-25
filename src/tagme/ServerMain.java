@@ -5,7 +5,7 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.JmeContext;
 import java.util.Random;
-import network.client.GameServer;
+import network.server.GameServer;
 import world.World;
 
 /**

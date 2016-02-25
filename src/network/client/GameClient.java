@@ -1,5 +1,6 @@
 package network.client;
 
+import network.server.GameServer;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.network.Client;
 import com.jme3.network.Message;

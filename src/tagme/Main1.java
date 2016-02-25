@@ -86,7 +86,7 @@ public class Main1 extends SimpleApplication {
         
         Node player = new Node();
         player.attachChild(new PlayerModel(ColorRGBA.Green).createModel(world));
-        new PlayerLogic(new Vector3f(50, 50, 50)).applyLogic(world, player);
+        new PlayerLogic(new Vector3f(50, 50, 50)).addLogic(world, player);
         world.addGameObject(player);
         
         Vector3f worldSize = new Vector3f(200, 40, 200);

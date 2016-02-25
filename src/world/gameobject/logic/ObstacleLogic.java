@@ -33,7 +33,7 @@ public class ObstacleLogic extends Logic {
     
     
     @Override
-    public void applyLogic(World world, Node obstacle) {
+    public void addLogic(World world, Node obstacle) {
         obstacle.setLocalTranslation(startLocation);
         obstacle.addControl(new ObstacleControl(initialSpeed, targetLocation));
         obstacle.addControl(new RigidBodyControl(0));

@@ -14,5 +14,13 @@ import world.World;
  */
 public abstract class Logic {
     
-    public abstract void applyLogic(World world, Node gameObject);
+    public abstract void addLogic(World world, Node gameObject);
+    /**
+     * Remove the logic added in addLogic().
+     * The GameObject must have the same state as before logic was added.
+     * 
+     * @param world
+     * @param gameObject 
+     */
+    public abstract void removeLogic(World world, Node gameObject);
 }
