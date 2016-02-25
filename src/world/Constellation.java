@@ -16,9 +16,16 @@ public class Constellation implements Serializable {
     
     private ArrayList<Spatial> obstacles = new ArrayList<>();
     
+    public void addObstacle(Spatial obstacle) {
+        obstacles.add(obstacle);
+    }
     
-    public void addObstacle() {
-        
+    public void removeObstacle(Spatial obstacle) {
+        obstacles.remove(obstacle);
+    }
+
+    public ArrayList<Spatial> getObstacles() {
+        return obstacles;
     }
     
 }

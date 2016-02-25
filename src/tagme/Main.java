@@ -6,6 +6,7 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
+import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
@@ -77,10 +78,36 @@ public class Main extends SimpleApplication {
         
         GameObjectFactory factory = new GameObjectFactory(world);
         
-        initWorld(world, new Vector3f(50, 10, 50));
+//        initWorld(world, new Vector3f(50, 10, 50));
         
         Spatial player = factory.createPlayer(new Vector3f(0, 10, 0), ColorRGBA.Green);
         world.addGameObject(player);
+        
+        Vector3f worldSize = new Vector3f(200, 40, 200);
+        for (int i = 0; i < 200; i++) {
+            Vector3f obstacleSize = new Vector3f();
+            obstacleSize.x = (float) (random.nextInt(1000) + 10) / 100f;
+            obstacleSize.y = (float) (random.nextInt(400) + 10) / 100f;
+            obstacleSize.z = (float) (random.nextInt(1000) + 10) / 100f;
+            
+            Vector3f targetPosition = new Vector3f();
+            // get a random position
+            targetPosition.x = (float) random.nextInt((int) (worldSize.x * 1000)) / 1000f;
+            targetPosition.y = (float) random.nextInt((int) (worldSize.y * 1000)) / 1000f;
+            targetPosition.z = (float) random.nextInt((int) (worldSize.z * 1000)) / 1000f;
+            Geometry obstacleGeom = ModelFactory.createBox(assetManager, obstacleSize.x, obstacleSize.y, obstacleSize.z, ColorRGBA.Blue);
+            
+            Material mat = world.getApp().getAssetManager().loadMaterial("Materials/obstacle.j3m");
+            obstacleGeom.setMaterial(mat);
+            
+            Node obstacle = new Node();
+            obstacle.setLocalTranslation(targetPosition);
+            obstacle.attachChild(obstacleGeom);
+            obstacle.addControl(new RigidBodyControl(0));
+            world.addGameObject(obstacle);
+            
+            
+        }
     }
     
     private void initWorld(World world, Vector3f worldSize) {

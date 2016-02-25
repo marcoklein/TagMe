@@ -53,6 +53,8 @@ public class World {
      * All Game Objects are added to the world node.
      */
     private Node worldNode;
+    
+    private int gameObjectId;
 
     public World(Application app, BulletAppState bulletAppState, Node worldNode, Vector3f size) {
         this.app = app;
@@ -106,8 +108,19 @@ public class World {
             LOG.log(Level.WARNING, "Could not add Game Object {0} because no appropriate control could be found - entity is no Game Object.", entity);
             return;
         }
+        
+        for (WorldListener listener : listeners) {
+            listener.gameObjectAdded(entity);
+        }
+        
+        // set id of entity
+        entity.setUserData("Id", generateGameObjectId());
 
         worldNode.attachChild(entity);
+    }
+    
+    private int generateGameObjectId() {
+        return gameObjectId++;
     }
     
     /**
