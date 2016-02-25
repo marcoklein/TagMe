@@ -102,6 +102,18 @@ public class World {
         return addGameObject(gameObject, generateGameObjectId());
     }
     
+    /**
+     * Adds the given GameObjectControl to a Node and adds it to the world.
+     * 
+     * @param gameObjectControl
+     * @return 
+     */
+    public int addGameObject(GameObjectControl gameObjectControl) {
+        Node gameObject = new Node("GameObject");
+        gameObject.addControl(gameObjectControl);
+        return addGameObject(gameObject);
+    }
+    
     public int addGameObject(Node gameObject, int id) {
         WorldControl gameObjectEntity = gameObject.getControl(WorldControl.class);
         if (gameObjectEntity != null) {

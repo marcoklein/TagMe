@@ -14,6 +14,7 @@ import world.gameobject.logic.AttachLogic;
 import world.gameobject.logic.ObstacleLogic;
 import world.gameobject.logic.PlayerLogic;
 import world.gameobject.logic.StaticPhysicsLogic;
+import world.gameobject.model.AssetModel;
 import world.gameobject.model.GroundModel;
 import world.gameobject.model.ObstacleModel;
 import world.gameobject.model.PlayerModel;
@@ -43,6 +44,7 @@ public class NetworkSerializer {
         Serializer.registerClass(PlayerModel.class);
         Serializer.registerClass(GroundModel.class);
         Serializer.registerClass(ObstacleModel.class);
+        Serializer.registerClass(AssetModel.class);
         
         
         // logic

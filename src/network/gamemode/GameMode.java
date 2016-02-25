@@ -2,6 +2,7 @@ package network.gamemode;
 
 import com.jme3.network.Server;
 import world.GameObjectControl;
+import world.World;
 
 /**
  * Marco Klein
@@ -11,6 +12,7 @@ import world.GameObjectControl;
 public abstract class GameMode {
     
     protected Server server;
+    protected World world;
     
     protected GameModeManager manager;
 
@@ -22,5 +24,6 @@ public abstract class GameMode {
     void setManager(GameModeManager manager) {
         this.manager = manager;
         this.server = manager.getServer();
+        this.world = manager.getWorld();
     }
 }
