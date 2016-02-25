@@ -25,12 +25,6 @@ public class GameObjectControl extends AbstractControl {
     protected Node modelNode;
     
     protected Logic logic;
-    /**
-     * Checks if the logic which has been set in the constructor has already
-     * been added.
-     */
-    protected boolean initialLogicAdded = true;
-    
     
     private int id;
     
@@ -43,9 +37,6 @@ public class GameObjectControl extends AbstractControl {
         this.world = world;
         this.model = model;
         this.logic = logic;
-        if (this.logic != null) {
-            initialLogicAdded = false;
-        }
     }
 
     @Override
@@ -68,7 +59,10 @@ public class GameObjectControl extends AbstractControl {
         
         // apply model and logic
         setModel(model);
-        setLogic(logic);
+        if (gameObject != null && logic != null) {
+            logic.addLogic(world, gameObject);
+        }
+        
     }
 
     public Model getModel() {
@@ -99,11 +93,10 @@ public class GameObjectControl extends AbstractControl {
     }
 
     public void setLogic(Logic logic) {
-        if (!initialLogicAdded && this.logic != null) {
+        if (this.logic != null) {
             // remove preexisting logic
             this.logic.removeLogic(world, gameObject);
         }
-        initialLogicAdded = true;
         this.logic = logic;
         if (gameObject != null && logic != null) {
             logic.addLogic(world, gameObject);

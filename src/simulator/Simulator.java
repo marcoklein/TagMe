@@ -10,7 +10,6 @@ import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import world.World;
-import world.WorldListener;
 import world.control.ObstacleControl;
 import world.control.PlayerControl;
 
@@ -30,7 +29,7 @@ import world.control.PlayerControl;
  *
  * @author Marco Klein
  */
-public class Simulator extends AbstractAppState implements WorldListener {
+public class Simulator extends AbstractAppState {
     private static final Logger LOG = Logger.getLogger(Simulator.class.getName());
     
     private World world;
@@ -107,7 +106,6 @@ public class Simulator extends AbstractAppState implements WorldListener {
         super.cleanup();
     }
 
-    @Override
     public void gameObjectAdded(Spatial gameObject) {
         if (gameObject.getControl(PlayerControl.class) != null) {
             // add to players
@@ -118,7 +116,6 @@ public class Simulator extends AbstractAppState implements WorldListener {
         }
     }
 
-    @Override
     public void gameObjectRemoved(Spatial gameObject) {
         // TODO if players stands on obstacle he has to fall down
         players.remove(gameObject);

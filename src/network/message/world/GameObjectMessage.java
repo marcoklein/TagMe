@@ -37,7 +37,7 @@ public abstract class GameObjectMessage extends WorldMessage {
     @Override
     public void applyToWorld(World world) {
         Node gameObject = world.getGameObject(id);
-        applyToGameObject(world, gameObject, gameObject.getControl(GameObjectControl.class));
+        applyToGameObject(world, gameObject, gameObject == null ? null : gameObject.getControl(GameObjectControl.class));
     }
     
     public abstract void applyToGameObject(World world, Node gameObject, GameObjectControl gameObjectControl);

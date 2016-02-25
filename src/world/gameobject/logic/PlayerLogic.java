@@ -35,6 +35,9 @@ public class PlayerLogic extends Logic {
     @Override
     public void addLogic(World world, Node player) {
         Spatial model = player.getChild("Model");
+        if (model == null) {
+            LOG.warning("Model is null - can not apply PlayerLogic.");
+        }
         LOG.info("Applying Player logic.");
         
         // move player to start location

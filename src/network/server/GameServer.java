@@ -12,7 +12,6 @@ import com.jme3.network.MessageListener;
 import com.jme3.network.Network;
 import com.jme3.network.Server;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -30,10 +29,9 @@ import network.message.world.RemoveGameObjectMessage;
 import network.message.world.UpdateGameObjectPositionMessage;
 import network.message.world.UpdateLogicMessage;
 import network.message.world.WorldMessage;
+import world.GameObjectControl;
 import world.World;
 import world.WorldListener;
-import world.control.LogicControl;
-import world.control.ModelControl;
 import world.gameobject.logic.ObstacleLogic;
 import world.gameobject.logic.PlayerLogic;
 import world.gameobject.logic.StaticPhysicsLogic;
@@ -88,13 +86,11 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
         
         // initialize world
         Node ground = new Node();
-        ground.addControl(new ModelControl(world, new GroundModel()));
-        ground.addControl(new LogicControl(world, new StaticPhysicsLogic()));
+        ground.addControl(new GameObjectControl(world, new GroundModel(), new StaticPhysicsLogic()));
         world.addGameObject(ground);
         
         Node obstacle = new Node();
-        obstacle.addControl(new ModelControl(world, new ObstacleModel(new Vector3f(20, 20, 20))));
-        obstacle.addControl(new LogicControl(world, new ObstacleLogic(new Vector3f(20, 20, 20), 0, new Vector3f(20, 20, 20))));
+        obstacle.addControl(new GameObjectControl(world, new ObstacleModel(new Vector3f(20, 20, 20)), new ObstacleLogic(new Vector3f(20, 20, 20), 0, new Vector3f(20, 20, 20))));
         world.addGameObject(obstacle);
         
         
@@ -117,8 +113,7 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
             targetPosition.z = (float) random.nextInt((int) (worldSize.z * 1000)) / 1000f;
             
             Node obstacle = new Node();
-            obstacle.addControl(new ModelControl(world, new ObstacleModel(obstacleSize)));
-            obstacle.addControl(new LogicControl(world, new ObstacleLogic(targetPosition, 0, targetPosition)));
+            obstacle.addControl(new GameObjectControl(world, new ObstacleModel(obstacleSize), new ObstacleLogic(targetPosition, 0, targetPosition)));
             
             
             world.addGameObject(obstacle);
@@ -159,7 +154,7 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
                     
                     // add a player model to the client
                     Node playerNode = new Node();
-                    playerNode.addControl(new ModelControl(world, new PlayerModel(ColorRGBA.White)));
+                    playerNode.addControl(new GameObjectControl(world, new PlayerModel(ColorRGBA.White), null));
                     int id = world.addGameObject(playerNode);
                     
                     //int id = world.generateGameObjectId();
@@ -203,14 +198,14 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
     }
 
     @Override
-    public void gameObjectAdded(Spatial gameObject) {
+    public void gameObjectAdded(Node gameObject) {
         LOG.info("Adding GameObject to world.");
         // inform clients
         server.broadcast(new AddGameObjectMessage(gameObject));
     }
 
     @Override
-    public void gameObjectRemoved(Spatial gameObject) {
+    public void gameObjectRemoved(Node gameObject) {
         LOG.info("Removing GameObject from world.");
         server.broadcast(new RemoveGameObjectMessage((int) gameObject.getUserData("Id")));
     }
