@@ -7,6 +7,7 @@ import network.message.SetPlayerMessage;
 import network.message.world.AddGameObjectMessage;
 import network.message.world.InitWorldMessage;
 import network.message.world.RemoveGameObjectMessage;
+import network.message.world.SetGameObjectLocationMessage;
 import network.message.world.UpdateGameObjectPositionMessage;
 import network.message.world.UpdateLogicMessage;
 import network.message.world.UpdateModelMessage;
@@ -38,6 +39,8 @@ public class NetworkSerializer {
         Serializer.registerClass(UpdateLogicMessage.class);
         Serializer.registerClass(UpdateModelMessage.class);
         Serializer.registerClass(UpdateGameObjectPositionMessage.class);
+        
+        Serializer.registerClass(SetGameObjectLocationMessage.class);
         
         
         // model

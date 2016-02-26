@@ -53,6 +53,13 @@ public class GameModeManager extends AbstractAppState {
                 
             }
         }
+        
+        // check if a player fell of world
+        for (GameObjectControl player : players) {
+            if (player.getGameObject().getLocalTranslation().y < -20) {
+                gameMode.playerLeftWorldBoundaries(player);
+            }
+        }
     }
     
     public void changeGameMode(GameMode gameMode) {

@@ -35,8 +35,12 @@ public class UpdateGameObjectPositionMessage extends GameObjectMessage {
 
     @Override
     public void applyToGameObject(World world, Node gameObject, GameObjectControl gameObjectControl) {
-        gameObjectControl.getModelNode().setLocalRotation(rotation);
-        gameObject.setLocalTranslation(location);
+        if (rotation != null) {
+            gameObjectControl.getModelNode().setLocalRotation(rotation);
+        }
+        if (location != null) {
+            gameObject.setLocalTranslation(location);
+        }
     }
     
 }

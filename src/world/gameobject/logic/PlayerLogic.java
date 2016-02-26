@@ -58,7 +58,8 @@ public class PlayerLogic extends Logic {
         cam.setInvertVerticalAxis(true);
         
         // add physics
-        world.getBulletAppState().getPhysicsSpace().addAll(player);
+        world.getBulletAppState().getPhysicsSpace().add(characterControl);
+        
     }
 
     @Override

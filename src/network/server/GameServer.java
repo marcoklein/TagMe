@@ -67,7 +67,6 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
     public GameServer(World world) {
         super(world);
         NetworkSerializer.registerClasses();
-        gameModeManager = new GameModeManager(server, world);
     }
 
     @Override
@@ -82,6 +81,7 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
         server.start();
         
         // add a game mode state
+        gameModeManager = new GameModeManager(server, world);
         stateManager.attach(gameModeManager);
         
         // add listeners

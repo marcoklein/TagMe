@@ -15,6 +15,8 @@ public class SyncPlayerControl extends AbstractControl {
     
     private Client client;
     
+    private float updateTime = 0.3f;
+    private float currentUpdateTime = updateTime;
     
 
     public SyncPlayerControl(Client client) {
@@ -24,9 +26,12 @@ public class SyncPlayerControl extends AbstractControl {
     @Override
     protected void controlUpdate(float tpf) {
         // TODO check if player has moved
-        client.send(new UpdateGameObjectPositionMessage(
-                spatial
-                ));
+        currentUpdateTime -= tpf;
+        if (currentUpdateTime <= 0) {
+            currentUpdateTime = updateTime;
+            client.send(new UpdateGameObjectPositionMessage(
+                    spatial));
+        }
     }
 
     @Override

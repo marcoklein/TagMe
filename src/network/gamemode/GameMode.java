@@ -21,6 +21,8 @@ public abstract class GameMode {
     
     public abstract void playerCollision(GameObjectControl playerA, GameObjectControl playerB);
     
+    public abstract void playerLeftWorldBoundaries(GameObjectControl player);
+    
     void setManager(GameModeManager manager) {
         this.manager = manager;
         this.server = manager.getServer();
