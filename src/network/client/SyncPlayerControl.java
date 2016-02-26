@@ -15,7 +15,7 @@ public class SyncPlayerControl extends AbstractControl {
     
     private Client client;
     
-    private float updateTime = 0.3f;
+    private float updateTime = 0.0f;
     private float currentUpdateTime = updateTime;
     
 
