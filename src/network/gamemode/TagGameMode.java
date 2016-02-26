@@ -16,7 +16,7 @@ import world.gameobject.model.AssetModel;
  */
 public class TagGameMode extends GameMode {
 
-    private Vector3f spawnPosition = new Vector3f(25, 50, 25);
+    private Vector3f spawnPosition = new Vector3f(0, 50, 0);
     
     private GameObjectControl currentCatcherEffect;
     private GameObjectControl currentCatcher;
@@ -45,7 +45,7 @@ public class TagGameMode extends GameMode {
         // set up world
         world.addConstellation(
                 new RandomWorldBuilder()
-                .setWorldSize(new Vector3f(20, 5, 20))
+                .setWorldSize(new Vector3f(40, 10, 40))
                 .setCreateGround(true)
                 .setDensity(200)
                 .build(world));

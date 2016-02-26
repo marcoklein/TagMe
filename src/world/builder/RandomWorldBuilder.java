@@ -5,8 +5,12 @@
 package world.builder;
 
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 import world.Constellation;
+import world.GameObjectControl;
 import world.World;
+import world.gameobject.logic.StaticPhysicsLogic;
+import world.gameobject.model.GroundModel;
 
 /**
  *
@@ -59,14 +63,13 @@ public class RandomWorldBuilder {
                 .build(world));
         
         if (createGround) {
-            constellation.addGameObject(
-                    new RandomObstacleBuilder()
-                    .size(new Vector3f(worldSize.x, 1, worldSize.z))
-                    .location(new Vector3f(0, -1, 0))
-                    .build(world)
-                    );
+            Node ground = new Node("Ground");
+            ground.setLocalTranslation(new Vector3f(0, -1, 0));
+            GameObjectControl gameObjectControl = new GameObjectControl(world, new GroundModel(new Vector3f(worldSize.x, 1, worldSize.z)), new StaticPhysicsLogic());
+            ground.addControl(gameObjectControl);
+            constellation.addGameObject(ground);
         }
-        
+
         return constellation;
     }
     

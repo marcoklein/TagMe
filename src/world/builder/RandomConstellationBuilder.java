@@ -1,6 +1,6 @@
 package world.builder;
 
-import world.builder.RandomObstacleBuilder;
+import world.builder.ObstacleBuilder;
 import com.jme3.math.Vector3f;
 import java.util.Random;
 import world.Constellation;
@@ -51,8 +51,8 @@ public class RandomConstellationBuilder {
         Constellation constellation = new Constellation();
         
         for (int i = 0; i < obstacles; i++) {
-            constellation.addGameObject(new RandomObstacleBuilder()
-                    .locationRange(new Vector3f(-worldSize.x, worldSize.y, -worldSize.z), worldSize)
+            constellation.addGameObject(new ObstacleBuilder()
+                    .locationRange(new Vector3f(-worldSize.x, 0, -worldSize.z), worldSize)
                     .setSlideIn(false)
                     .sizeRange(minObstacleSize, maxObstacleSize)
                     .build(world)

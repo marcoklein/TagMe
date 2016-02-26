@@ -17,7 +17,7 @@ import world.gameobject.model.ObstacleModel;
  *
  * @author bidlingm
  */
-public class RandomObstacleBuilder {
+public class ObstacleBuilder {
     private Random random = new Random();
 
     private Vector3f size;
@@ -28,42 +28,42 @@ public class RandomObstacleBuilder {
     private ColorRGBA color;
     private boolean slideIn;
     
-    public RandomObstacleBuilder(){
+    public ObstacleBuilder(){
     }
 
-    public RandomObstacleBuilder sizeRange(Vector3f minSize, Vector3f maxSize) {
+    public ObstacleBuilder sizeRange(Vector3f minSize, Vector3f maxSize) {
         this.minSize = minSize;
         this.maxSize = maxSize;
         return this;
     }
 
-    public RandomObstacleBuilder size(Vector3f size) {
+    public ObstacleBuilder size(Vector3f size) {
         this.size = size;
         return this;
     }
 
-    public RandomObstacleBuilder locationRange(Vector3f minLoc, Vector3f maxLoc) {
+    public ObstacleBuilder locationRange(Vector3f minLoc, Vector3f maxLoc) {
         this.minLocation = minLoc;
         this.maxLocation = maxLoc;
         return this;
     }
 
-    public RandomObstacleBuilder location(Vector3f location) {
+    public ObstacleBuilder location(Vector3f location) {
         this.location = location;
         return this;
     }
     
-    public RandomObstacleBuilder initialSpeed(float speed) {
+    public ObstacleBuilder initialSpeed(float speed) {
         this.initialSpeed = speed;
         return this;
     }
 
-    public RandomObstacleBuilder setSlideIn(boolean slideIn) {
+    public ObstacleBuilder setSlideIn(boolean slideIn) {
         this.slideIn = slideIn;
         return this;
     }
 
-    public RandomObstacleBuilder setColor(ColorRGBA color) {
+    public ObstacleBuilder setColor(ColorRGBA color) {
         this.color = color;
         return this;
     }
