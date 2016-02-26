@@ -47,7 +47,7 @@ public class PlayerLogic extends Logic {
         }
         
         // add controls
-        BetterCharacterControl characterControl = new BetterCharacterControl(1f, 2f, 40f);
+        BetterCharacterControl characterControl = new BetterCharacterControl(0.8f, 1.6f, 1f);
         characterControl.setJumpForce(new Vector3f(0, 8f, 0));
         characterControl.setGravity(new Vector3f(0, -9.81f, 0));
         player.addControl(characterControl);
@@ -57,7 +57,7 @@ public class PlayerLogic extends Logic {
         ChaseCamera cam = new ChaseCamera(world.getApp().getCamera(), model, world.getApp().getInputManager());
         cam.setDragToRotate(false);
         cam.setInvertVerticalAxis(true);
-        cam.setDefaultDistance(0.1f);
+        cam.setDefaultDistance(1);
         
         // add physics
         world.getBulletAppState().getPhysicsSpace().add(characterControl);

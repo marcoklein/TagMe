@@ -44,12 +44,48 @@ public class TagGameMode extends GameMode {
 //                .build(world)
 //                );
         // set up world
+        // big obstacles
+        world.addConstellation(
+                new RandomWorldBuilder()
+                .setWorldSize(new Vector3f(60, 10, 60))
+                .setAverageObstacleSize(new Vector3f(5, 5, 5))
+                .setObstacleSizeVariance(new Vector3f(4, 4, 4))
+                .setCreateGround(false)
+                .setDensity(5)
+                .build(world));
+        
         world.addConstellation(
                 new RandomWorldBuilder()
                 .setWorldSize(new Vector3f(40, 10, 40))
                 .setCreateGround(true)
-                .setDensity(300)
                 .build(world));
+        
+        // air obstacles (to get on big ones)
+        world.addConstellation(
+                new RandomWorldBuilder()
+                .setWorldSize(new Vector3f(60, 10, 60))
+                .setAverageObstacleSize(new Vector3f(3, 2f, 3))
+                .setObstacleSizeVariance(new Vector3f(2, 1f, 2))
+                .setDensity(100)
+                .build(world));
+        // ground obstacles
+        world.addConstellation(
+                new RandomWorldBuilder()
+                .setWorldSize(new Vector3f(40, 2, 40))
+                .setAverageObstacleSize(new Vector3f(2, 2f, 2))
+                .setObstacleSizeVariance(new Vector3f(1.5f, 1f, 1.5f))
+                .setDensity(100)
+                .build(world));
+        // no ground only obstacles
+//        world.addConstellation(
+//                new RandomWorldBuilder()
+//                .setWorldSize(new Vector3f(60, 4, 60))
+//                .setAverageObstacleSize(new Vector3f(5, 3, 5))
+//                .setObstacleSizeVariance(new Vector3f(4, 2, 4))
+//                .setCreateGround(false)
+//                .setDensity(100)
+//                .build(world));
+        
         world.addConstellation(new ObstacleConstellationFactory(world).createCross());
     }
 

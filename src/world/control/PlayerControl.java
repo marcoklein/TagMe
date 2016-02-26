@@ -180,13 +180,14 @@ public class PlayerControl extends WorldControl implements ActionListener {
                 break;
             case "CharJump":
                 if (isPressed) {
+                    characterControl.jump();
                     if (characterControl.isOnGround()) {
                         jumpsInAir = 0;
                     }
                     if (jumpsInAir < maxJumpsInAir) {
                         // perform jump action only on press
                         jumpsInAir++;
-                        characterControl.getVelocity().addLocal(characterControl.getJumpForce());
+//                        characterControl.getVelocity().addLocal(characterControl.getJumpForce());
                     }
                 }
                 break;

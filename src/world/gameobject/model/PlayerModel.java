@@ -26,7 +26,7 @@ public class PlayerModel extends Model<Node> {
 
     public PlayerModel(ColorRGBA color) {
         this.color = color;
-        this.radius = 1;
+        this.radius = 0.8f;
     }
     
     @Override
@@ -34,7 +34,7 @@ public class PlayerModel extends Model<Node> {
         Node player = new Node();
         player.setName("Model");
         Geometry geom = new SphereModel(radius).createModel(world);
-        player.setLocalTranslation(0, 1f, 0);
+        player.setLocalTranslation(0, 0.8f, 0);
         
         AssetManager assetManager = world.getApp().getAssetManager();
         Material mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
