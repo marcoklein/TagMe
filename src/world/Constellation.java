@@ -1,11 +1,11 @@
 package world;
 
-import com.jme3.scene.Spatial;
+import com.jme3.scene.Node;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Constellations consist out of several obstacles and normally form a big "thing"
+ * Constellations consist out of several Game Objects which normally form a big "thing"
  * for example a house.
  * 
  * Constellations are used to make worlds more interesting.
@@ -14,18 +14,18 @@ import java.util.ArrayList;
  */
 public class Constellation implements Serializable {
     
-    private ArrayList<Spatial> obstacles = new ArrayList<>();
+    private ArrayList<Node> gameObjects = new ArrayList<>();
     
-    public void addObstacle(Spatial obstacle) {
-        obstacles.add(obstacle);
+    public void addGameObject(Node obstacle) {
+        gameObjects.add(obstacle);
     }
     
-    public void removeObstacle(Spatial obstacle) {
-        obstacles.remove(obstacle);
+    public void removeGameObject(Node obstacle) {
+        gameObjects.remove(obstacle);
     }
 
-    public ArrayList<Spatial> getObstacles() {
-        return obstacles;
+    public ArrayList<Node> getGameObjects() {
+        return gameObjects;
     }
     
 }

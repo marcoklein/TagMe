@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import network.message.world.SetGameObjectLocationMessage;
 import network.message.world.UpdateGameObjectPositionMessage;
 import world.GameObjectControl;
+import world.WorldBuilder;
 import world.gameobject.logic.AttachLogic;
 import world.gameobject.model.AssetModel;
 
@@ -28,6 +29,14 @@ public class TagGameMode extends GameMode {
     @Override
     public void initialize(GameModeManager manager) {
         players = manager.getPlayers();
+        
+        // set up world
+        world.addConstellation(new WorldBuilder()
+                .worldSize(new Vector3f(50, 50, 50))
+                .obstacles(50)
+                .obstacleSizeRange(new Vector3f(0.5f, 0.5f, 0.5f), new Vector3f(4f, 4f, 4f))
+                .buildWorld(world)
+                );
     }
 
     @Override

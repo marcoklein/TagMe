@@ -74,6 +74,18 @@ public class World {
     }
     
     /**
+     * Adds given constellation by calling addGameObject for each constellation
+     * member.
+     * 
+     * @param constellation 
+     */
+    public void addConstellation(Constellation constellation) {
+        for (Node gameObject : constellation.getGameObjects()) {
+            addGameObject(gameObject);
+        }
+    }
+    
+    /**
      * Adds all given Game Objects and returns their associated ids in the same
      * order.
      * 

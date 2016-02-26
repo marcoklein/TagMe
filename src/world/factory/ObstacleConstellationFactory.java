@@ -1,6 +1,7 @@
 package world.factory;
 
 import world.Constellation;
+import world.World;
 
 /**
  * Creates constellations of obstacles.
@@ -12,7 +13,11 @@ import world.Constellation;
  *
  * @author Marco Klein
  */
-public class ObstacleConstellationFactory extends Constellation {
+public class ObstacleConstellationFactory extends WorldFactory {
+
+    public ObstacleConstellationFactory(World world) {
+        super(world);
+    }
     
     /**
      * Creates a constellation using the given file.

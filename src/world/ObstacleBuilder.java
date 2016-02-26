@@ -6,11 +6,10 @@ package world;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Spatial;
+import com.jme3.scene.Node;
 import java.util.Random;
-import world.factory.GameObjectFactory;
-import world.factory.ModelFactory;
+import world.gameobject.logic.ObstacleLogic;
+import world.gameobject.model.ObstacleModel;
 
 /**
  *
@@ -67,7 +66,7 @@ public class ObstacleBuilder {
         return this;
     }
 
-    public Spatial buildObstacle(World world) {
+    public Node buildObstacle(World world) {
 
         // set obstacle size
         Vector3f obstacleSize = new Vector3f();
@@ -113,59 +112,10 @@ public class ObstacleBuilder {
             color = ColorRGBA.Blue;
         }
         
-        GameObjectFactory factory = new GameObjectFactory(world);
-        Geometry obstacleGeom = ModelFactory.createBox(world.getApp().getAssetManager(), obstacleSize.x, obstacleSize.y, obstacleSize.z, color);
-        Spatial obstacle = factory.createObstacle(startLocation, targetLocation, obstacleGeom, initialSpeed);
+        Node obstacle = new Node("Obstacle");
+        GameObjectControl gameObjectControl = new GameObjectControl(world, new ObstacleModel(obstacleSize), new ObstacleLogic(startLocation, initialSpeed, targetLocation));
+        obstacle.addControl(gameObjectControl);
         return obstacle;
-    }
-    
-    public Geometry buildGeometry(World world) {
-        // set obstacle size
-        Vector3f obstacleSize = new Vector3f();
-        if(size != null){
-            obstacleSize = size;
-        }else if(minSize != null && maxSize != null) {
-            obstacleSize.x = minSize.x + random.nextFloat() * (maxSize.x-minSize.x);
-            obstacleSize.y = minSize.y + random.nextFloat() * (maxSize.y-minSize.y);
-            obstacleSize.z = minSize.z + random.nextFloat() * (maxSize.z-minSize.z);
-        }else {
-            obstacleSize.x = 1 + random.nextFloat() * 2;
-            obstacleSize.y = 1 + random.nextFloat() * 2;
-            obstacleSize.z = 1 + random.nextFloat() * 2;
-        }
-        
-        // set obstacle target position
-        Vector3f targetLocation = new Vector3f();
-        if(location != null){
-            targetLocation = location;
-        }else if(minLocation != null && maxLocation != null){
-            targetLocation.x = minLocation.x + random.nextFloat() * (maxLocation.x-minLocation.x);
-            targetLocation.y = minLocation.y + random.nextFloat() * (maxLocation.y-minLocation.y);
-            targetLocation.z = minLocation.z + random.nextFloat() * (maxLocation.z-minLocation.z);
-        }else {
-            targetLocation.x = random.nextFloat() * world.getWorldSize().x;
-            targetLocation.y = random.nextFloat() * world.getWorldSize().y;
-            targetLocation.z = random.nextFloat() * world.getWorldSize().z;
-        }
-        
-        // set obstacle starting position
-        Vector3f startLocation = new Vector3f();
-        startLocation.x = targetLocation.x;
-        startLocation.z = targetLocation.z;
-        
-        if(slideIn) {
-            startLocation.y = -obstacleSize.y;
-        }else {
-            startLocation.y = targetLocation.y;
-        }
-        
-        //set obstacle color
-        if(color != null) {
-            color = ColorRGBA.Blue;
-        }
-        
-        Geometry obstacleGeom = ModelFactory.createBox(world.getApp().getAssetManager(), obstacleSize.x, obstacleSize.y, obstacleSize.z, color);
-        return obstacleGeom;
     }
 
 }

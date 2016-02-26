@@ -93,16 +93,16 @@ public class GameServer extends NetworkAppState implements MessageListener<Hoste
         world.addListener(this);
         
         // initialize world
-        Node ground = new Node();
-        ground.addControl(new GameObjectControl(world, new GroundModel(), new StaticPhysicsLogic()));
-        world.addGameObject(ground);
-        
-        Node obstacle = new Node();
-        obstacle.addControl(new GameObjectControl(world, new ObstacleModel(new Vector3f(20, 20, 20)), new ObstacleLogic(new Vector3f(20, 20, 20), 0, new Vector3f(20, 20, 20))));
-        world.addGameObject(obstacle);
-        
-        initObstacles();
-        LOG.info("World initialized.");
+//        Node ground = new Node();
+//        ground.addControl(new GameObjectControl(world, new GroundModel(), new StaticPhysicsLogic()));
+//        world.addGameObject(ground);
+//        
+//        Node obstacle = new Node();
+//        obstacle.addControl(new GameObjectControl(world, new ObstacleModel(new Vector3f(20, 20, 20)), new ObstacleLogic(new Vector3f(20, 20, 20), 0, new Vector3f(20, 20, 20))));
+//        world.addGameObject(obstacle);
+//        
+//        initObstacles();
+//        LOG.info("World initialized.");
         
         // set up game mode
         gameModeManager.changeGameMode(new TagGameMode());
