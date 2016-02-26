@@ -13,7 +13,7 @@ import world.World;
  *
  * @author Marco Klein
  */
-public class ObstacleConstellationFactory extends WorldFactory {
+public class ObstacleConstellationFactory extends AbstractWorldFactory {
 
     public ObstacleConstellationFactory(World world) {
         super(world);

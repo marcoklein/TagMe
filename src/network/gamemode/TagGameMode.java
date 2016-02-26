@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import network.message.world.SetGameObjectLocationMessage;
 import network.message.world.UpdateGameObjectPositionMessage;
 import world.GameObjectControl;
-import world.WorldBuilder;
+import world.builder.RandomWorldBuilder;
 import world.gameobject.logic.AttachLogic;
 import world.gameobject.model.AssetModel;
 
@@ -16,7 +16,7 @@ import world.gameobject.model.AssetModel;
  */
 public class TagGameMode extends GameMode {
 
-    private Vector3f spawnPosition = new Vector3f(50, 50, 50);
+    private Vector3f spawnPosition = new Vector3f(25, 50, 25);
     
     private GameObjectControl currentCatcherEffect;
     private GameObjectControl currentCatcher;
@@ -30,13 +30,25 @@ public class TagGameMode extends GameMode {
     public void initialize(GameModeManager manager) {
         players = manager.getPlayers();
         
+//        // set up world
+//        world.addConstellation(new RandomConstellationBuilder()
+//                .worldSize(new Vector3f(50, 50, 50))
+//                .obstacles(200)
+//                .obstacleSizeRange(new Vector3f(0.5f, 0.5f, 0.5f), new Vector3f(4f, 4f, 4f))
+//                .build(world)
+//                );
+//        // add ground
+//        world.addGameObject(new ObstacleBuilder()
+//                .size(new Vector3f(25, 1, 25))
+//                .build(world)
+//                );
         // set up world
-        world.addConstellation(new WorldBuilder()
-                .worldSize(new Vector3f(50, 50, 50))
-                .obstacles(50)
-                .obstacleSizeRange(new Vector3f(0.5f, 0.5f, 0.5f), new Vector3f(4f, 4f, 4f))
-                .buildWorld(world)
-                );
+        world.addConstellation(
+                new RandomWorldBuilder()
+                .setWorldSize(new Vector3f(20, 5, 20))
+                .setCreateGround(true)
+                .setDensity(200)
+                .build(world));
     }
 
     @Override

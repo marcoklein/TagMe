@@ -7,11 +7,11 @@ import world.World;
  *
  * @author Marco Klein
  */
-public abstract class WorldFactory {
+public abstract class AbstractWorldFactory {
     
     protected World world;
 
-    public WorldFactory(World world) {
+    public AbstractWorldFactory(World world) {
         this.world = world;
     }
 

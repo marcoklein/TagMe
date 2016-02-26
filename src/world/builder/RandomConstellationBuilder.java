@@ -1,13 +1,16 @@
-package world;
+package world.builder;
 
+import world.builder.RandomObstacleBuilder;
 import com.jme3.math.Vector3f;
 import java.util.Random;
+import world.Constellation;
+import world.World;
 
 /**
  *
  * @author Marco Klein
  */
-public class WorldBuilder {
+public class RandomConstellationBuilder {
     private Random random = new Random();
     
     private Vector3f worldSize = null;
@@ -17,23 +20,23 @@ public class WorldBuilder {
     private float minInitialSpeed = 0;
     private float maxInitialSpeed = 0;
     
-    public WorldBuilder worldSize(Vector3f worldSize) {
+    public RandomConstellationBuilder worldSize(Vector3f worldSize) {
         this.worldSize = worldSize;
         return this;
     }
     
-    public WorldBuilder obstacles(int obstacles) {
+    public RandomConstellationBuilder obstacles(int obstacles) {
         this.obstacles = obstacles;
         return this;
     }
     
-    public WorldBuilder obstacleSizeRange(Vector3f minSize, Vector3f maxSize) {
+    public RandomConstellationBuilder obstacleSizeRange(Vector3f minSize, Vector3f maxSize) {
         this.minObstacleSize = minSize;
         this.maxObstacleSize = maxSize;
         return this;
     }
     
-    public WorldBuilder obstacleInitialSpeedRange(float min, float max) {
+    public RandomConstellationBuilder obstacleInitialSpeedRange(float min, float max) {
         this.minInitialSpeed = min;
         this.maxInitialSpeed = max;
         return this;
@@ -44,15 +47,15 @@ public class WorldBuilder {
      * 
      * @return 
      */
-    public Constellation buildWorld(World world) {
+    public Constellation build(World world) {
         Constellation constellation = new Constellation();
         
         for (int i = 0; i < obstacles; i++) {
-            constellation.addGameObject(new ObstacleBuilder()
-                    .locationRange(new Vector3f(0, 0, 0), worldSize)
+            constellation.addGameObject(new RandomObstacleBuilder()
+                    .locationRange(new Vector3f(-worldSize.x, worldSize.y, -worldSize.z), worldSize)
                     .setSlideIn(false)
                     .sizeRange(minObstacleSize, maxObstacleSize)
-                    .buildObstacle(world)
+                    .build(world)
                     );
         }
         

@@ -2,12 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package world;
+package world.builder;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import java.util.Random;
+import world.GameObjectControl;
+import world.World;
 import world.gameobject.logic.ObstacleLogic;
 import world.gameobject.model.ObstacleModel;
 
@@ -15,7 +17,7 @@ import world.gameobject.model.ObstacleModel;
  *
  * @author bidlingm
  */
-public class ObstacleBuilder {
+public class RandomObstacleBuilder {
     private Random random = new Random();
 
     private Vector3f size;
@@ -26,47 +28,47 @@ public class ObstacleBuilder {
     private ColorRGBA color;
     private boolean slideIn;
     
-    public ObstacleBuilder(){
+    public RandomObstacleBuilder(){
     }
 
-    public ObstacleBuilder sizeRange(Vector3f minSize, Vector3f maxSize) {
+    public RandomObstacleBuilder sizeRange(Vector3f minSize, Vector3f maxSize) {
         this.minSize = minSize;
         this.maxSize = maxSize;
         return this;
     }
 
-    public ObstacleBuilder size(Vector3f size) {
+    public RandomObstacleBuilder size(Vector3f size) {
         this.size = size;
         return this;
     }
 
-    public ObstacleBuilder locationRange(Vector3f minLoc, Vector3f maxLoc) {
+    public RandomObstacleBuilder locationRange(Vector3f minLoc, Vector3f maxLoc) {
         this.minLocation = minLoc;
         this.maxLocation = maxLoc;
         return this;
     }
 
-    public ObstacleBuilder location(Vector3f location) {
+    public RandomObstacleBuilder location(Vector3f location) {
         this.location = location;
         return this;
     }
     
-    public ObstacleBuilder initialSpeed(float speed) {
+    public RandomObstacleBuilder initialSpeed(float speed) {
         this.initialSpeed = speed;
         return this;
     }
 
-    public ObstacleBuilder setSlideIn(boolean slideIn) {
+    public RandomObstacleBuilder setSlideIn(boolean slideIn) {
         this.slideIn = slideIn;
         return this;
     }
 
-    public ObstacleBuilder setColor(ColorRGBA color) {
+    public RandomObstacleBuilder setColor(ColorRGBA color) {
         this.color = color;
         return this;
     }
 
-    public Node buildObstacle(World world) {
+    public Node build(World world) {
 
         // set obstacle size
         Vector3f obstacleSize = new Vector3f();

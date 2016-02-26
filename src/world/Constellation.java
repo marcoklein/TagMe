@@ -16,12 +16,16 @@ public class Constellation implements Serializable {
     
     private ArrayList<Node> gameObjects = new ArrayList<>();
     
-    public void addGameObject(Node obstacle) {
-        gameObjects.add(obstacle);
+    public void addConstellation(Constellation other) {
+        gameObjects.addAll(other.gameObjects);
     }
     
-    public void removeGameObject(Node obstacle) {
-        gameObjects.remove(obstacle);
+    public void addGameObject(Node gameObject) {
+        gameObjects.add(gameObject);
+    }
+    
+    public void removeGameObject(Node gameObject) {
+        gameObjects.remove(gameObject);
     }
 
     public ArrayList<Node> getGameObjects() {
