@@ -40,8 +40,13 @@ public class PlayerControl extends WorldControl implements ActionListener {
     private Vector3f tempVector2 = new Vector3f();
     private Vector3f tempVector3 = new Vector3f();
     
-    private int maxJumpsInAir = 2;
+    private int maxJumpsInAir = 1;
     private int jumpsInAir = 0;
+    
+    /**
+     * Player is slower in air.
+     */
+    private float airSpeedMultiplier = 0.8f;
     
     private Camera cam;
 
@@ -120,6 +125,9 @@ public class PlayerControl extends WorldControl implements ActionListener {
         }
         
         tempVector.normalizeLocal().multLocal(speed);
+        if (!characterControl.isOnGround()) {
+            tempVector.multLocal(airSpeedMultiplier);
+        }
         characterControl.getWalkDirection().set(tempVector);
         
         // animate player movement by rotating the player (since its geometry is a sphere)

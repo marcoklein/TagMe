@@ -6,6 +6,7 @@ import network.message.world.SetGameObjectLocationMessage;
 import network.message.world.UpdateGameObjectPositionMessage;
 import world.GameObjectControl;
 import world.builder.RandomWorldBuilder;
+import world.factory.ObstacleConstellationFactory;
 import world.gameobject.logic.AttachLogic;
 import world.gameobject.model.AssetModel;
 
@@ -47,8 +48,9 @@ public class TagGameMode extends GameMode {
                 new RandomWorldBuilder()
                 .setWorldSize(new Vector3f(40, 10, 40))
                 .setCreateGround(true)
-                .setDensity(200)
+                .setDensity(300)
                 .build(world));
+        world.addConstellation(new ObstacleConstellationFactory(world).createCross());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package world.factory;
 
+import com.jme3.math.Vector3f;
 import world.Constellation;
 import world.World;
 
@@ -17,6 +18,26 @@ public class ObstacleConstellationFactory extends AbstractWorldFactory {
 
     public ObstacleConstellationFactory(World world) {
         super(world);
+    }
+    
+    
+    public Constellation createCross() {
+        ObstacleConstellationBuilder builder = new ObstacleConstellationBuilder();
+        
+        float width = 10;
+        float height = 6;
+        float depth = 10;
+        
+        
+        // left wall
+        builder.add(new Vector3f(0, 0, 0), new Vector3f(1, height, depth));
+        // back wall
+        builder.add(new Vector3f(), new Vector3f(width, height + 0.5f, 1));
+        // right wall
+//        builder.add(new Vector3f(width, 0, 0), new Vector3f(0.5f, height, depth));
+        
+        
+        return builder.build(world);
     }
     
     /**
