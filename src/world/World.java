@@ -157,12 +157,20 @@ public class World {
         removeGameObject(gameObjects.get(id));
     }
     
+    public void removeGameObject(GameObjectControl gameObjectControl) {
+        removeGameObject(gameObjectControl.getId());
+    }
+    
     /**
      * Removes the given game object.
      * 
      * @param entity 
      */
     public void removeGameObject(Node entity) {
+        if (entity == null) {
+            LOG.warning("Tried to remove null GameObject.");
+            return;
+        }
         for (WorldListener listener : listeners) {
             listener.gameObjectRemoved(entity);
         }
@@ -170,6 +178,7 @@ public class World {
         entity.removeFromParent();
         gameObjects.remove((int) entity.getUserData("Id"));
         bulletAppState.getPhysicsSpace().removeAll(entity);
+        entity.getControl(GameObjectControl.class).setLogic(null);
         
     }
     

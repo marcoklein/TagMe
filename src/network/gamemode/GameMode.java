@@ -16,6 +16,10 @@ public abstract class GameMode {
     
     protected GameModeManager manager;
 
+    public abstract void initialize(GameModeManager manager);
+    
+    public abstract void update(float tpf);
+    
     public abstract void playerJoined(GameObjectControl player);
     public abstract void playerLeft(GameObjectControl player);
     
@@ -23,9 +27,13 @@ public abstract class GameMode {
     
     public abstract void playerLeftWorldBoundaries(GameObjectControl player);
     
+    
+    
+    
     void setManager(GameModeManager manager) {
         this.manager = manager;
         this.server = manager.getServer();
         this.world = manager.getWorld();
+        initialize(manager);
     }
 }

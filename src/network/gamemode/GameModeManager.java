@@ -34,7 +34,6 @@ public class GameModeManager extends AbstractAppState {
     @Override
     public void update(float tpf) {
         // test for collisions
-        CollisionResults result = new CollisionResults();
         GameObjectControl playerA;
         GameObjectControl playerB;
         
@@ -60,6 +59,8 @@ public class GameModeManager extends AbstractAppState {
                 gameMode.playerLeftWorldBoundaries(player);
             }
         }
+        
+        gameMode.update(tpf);
     }
     
     public void changeGameMode(GameMode gameMode) {
